@@ -1,0 +1,75 @@
+21-4-2014 14:37:07	This log contains information about the import schema operation into project 'ProfessionalImagingDataBase' on computer 'HYPERVELOX2' by user 'Doggie'.
+21-4-2014 14:37:08	Import of database schema has started.
+21-4-2014 14:37:11	Gathering database options
+21-4-2014 14:37:11	Gathering users
+21-4-2014 14:37:11	Gathering roles
+21-4-2014 14:37:11	Gathering application roles
+21-4-2014 14:37:11	Gathering role memberships
+21-4-2014 14:37:11	Gathering filegroups
+21-4-2014 14:37:11	Gathering full-text catalogs
+21-4-2014 14:37:11	Gathering assemblies
+21-4-2014 14:37:11	Gathering certificates
+21-4-2014 14:37:11	Gathering asymmetric keys
+21-4-2014 14:37:11	Gathering symmetric keys
+21-4-2014 14:37:11	Gathering encrypted symmetric keys
+21-4-2014 14:37:11	Gathering schemas
+21-4-2014 14:37:12	Gathering XML schema collections
+21-4-2014 14:37:12	Gathering user-defined data types
+21-4-2014 14:37:12	Gathering user-defined types
+21-4-2014 14:37:12	Gathering table types
+21-4-2014 14:37:12	Gathering unique keys for table types
+21-4-2014 14:37:12	Gathering primary keys for table types
+21-4-2014 14:37:12	Gathering check constraints for table types
+21-4-2014 14:37:12	Gathering default constraints for table types
+21-4-2014 14:37:12	Gathering partition functions
+21-4-2014 14:37:12	Gathering partition schemes
+21-4-2014 14:37:12	Gathering functions
+21-4-2014 14:37:12	Gathering encrypted functions
+21-4-2014 14:37:12	Gathering aggregates
+21-4-2014 14:37:12	Gathering procedures
+21-4-2014 14:37:12	Gathering encrypted procedures
+21-4-2014 14:37:12	Gathering tables
+21-4-2014 14:37:12	Gathering primary keys
+21-4-2014 14:37:12	Gathering unique constraints
+21-4-2014 14:37:12	Gathering foreign keys
+21-4-2014 14:37:12	Gathering default constraints
+21-4-2014 14:37:12	Gathering check constraints
+21-4-2014 14:37:12	Gathering views
+21-4-2014 14:37:12	Gathering encrypted views
+21-4-2014 14:37:12	Gathering indexes
+21-4-2014 14:37:12	Gathering statistics
+21-4-2014 14:37:12	Gathering full-text index stoplists
+21-4-2014 14:37:12	Gathering search property lists
+21-4-2014 14:37:12	Gathering search properties
+21-4-2014 14:37:12	Gathering full-text indexes
+21-4-2014 14:37:12	Gathering column store indexes
+21-4-2014 14:37:12	Gathering spatial indexes
+21-4-2014 14:37:12	Gathering XML indexes
+21-4-2014 14:37:12	Gathering Selective XML indexes
+21-4-2014 14:37:12	Gathering encrypted triggers
+21-4-2014 14:37:12	Gathering triggers
+21-4-2014 14:37:12	Gathering encrypted and clr ddl triggers
+21-4-2014 14:37:12	Gathering ddl triggers
+21-4-2014 14:37:12	Gathering synonyms
+21-4-2014 14:37:12	Gathering defaults
+21-4-2014 14:37:12	Gathering data constraint uddt bindings
+21-4-2014 14:37:12	Gathering rules
+21-4-2014 14:37:12	Gathering data constraint uddt bindings
+21-4-2014 14:37:12	Gathering message types
+21-4-2014 14:37:12	Gathering queues
+21-4-2014 14:37:12	Gathering contracts
+21-4-2014 14:37:12	Gathering services
+21-4-2014 14:37:12	Gathering event notifications
+21-4-2014 14:37:12	Gathering remote service bindings
+21-4-2014 14:37:12	Gathering broker priorities
+21-4-2014 14:37:12	Gathering signatures
+21-4-2014 14:37:12	Gathering data compression options
+21-4-2014 14:37:12	Gathering sequence types
+21-4-2014 14:37:12	Gathering database permissions
+21-4-2014 14:37:12	Gathering extended properties
+21-4-2014 14:37:12	Gathering credentials
+21-4-2014 14:37:12	Gathering logins
+21-4-2014 14:37:12	Gathering server audits
+21-4-2014 14:37:12	Finished importing database.
+21-4-2014 14:37:12	A summary of the import was saved to the following location: c:\users\doggie\documents\visual studio 2013\Projects\ProfessionalImaging\ProfessionalImaging\Import Schema Logs\ProfessionalImagingD_20140421123707.log
+21-4-2014 14:37:12	Click Finish to continue...

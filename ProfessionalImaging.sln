@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ProfessionalImagingDataBase", "ProfessionalImaging\ProfessionalImagingDataBase.sqlproj", "{039E38D3-F568-40D1-9BA7-2755C9BC590F}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ProfessionalImagingWebsite", "http://localhost:50313", "{F08AD5E5-E597-4E69-8D49-37A90B11C6B2}"
+	ProjectSection(WebsiteProperties) = preProject
+		UseIISExpress = "true"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		ProjectReferences = "{039e38d3-f568-40d1-9ba7-2755c9bc590f}|ProfessionalImaging.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_50313"
+		Debug.AspNetCompiler.PhysicalPath = "ProfessionalImagingWebsite\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_50313\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_50313"
+		Release.AspNetCompiler.PhysicalPath = "ProfessionalImagingWebsite\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_50313\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "ProfessionalImagingWebsite\"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{039E38D3-F568-40D1-9BA7-2755C9BC590F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{039E38D3-F568-40D1-9BA7-2755C9BC590F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{039E38D3-F568-40D1-9BA7-2755C9BC590F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{039E38D3-F568-40D1-9BA7-2755C9BC590F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{039E38D3-F568-40D1-9BA7-2755C9BC590F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{039E38D3-F568-40D1-9BA7-2755C9BC590F}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{F08AD5E5-E597-4E69-8D49-37A90B11C6B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F08AD5E5-E597-4E69-8D49-37A90B11C6B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F08AD5E5-E597-4E69-8D49-37A90B11C6B2}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{F08AD5E5-E597-4E69-8D49-37A90B11C6B2}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

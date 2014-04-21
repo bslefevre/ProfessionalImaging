@@ -1,0 +1,5 @@
+c:\users\doggie\documents\visual studio 2013\Projects\ProfessionalImaging\ProfessionalImaging\bin\Debug\ProfessionalImagingDataBase.dacpac
+c:\users\doggie\documents\visual studio 2013\Projects\ProfessionalImaging\ProfessionalImaging\bin\Debug\ProfessionalImaging.dll
+c:\users\doggie\documents\visual studio 2013\Projects\ProfessionalImaging\ProfessionalImaging\bin\Debug\ProfessionalImaging.pdb
+c:\users\doggie\documents\visual studio 2013\Projects\ProfessionalImaging\ProfessionalImaging\obj\Debug\ProfessionalImaging.dll
+c:\users\doggie\documents\visual studio 2013\Projects\ProfessionalImaging\ProfessionalImaging\obj\Debug\ProfessionalImaging.pdb
