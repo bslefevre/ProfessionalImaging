@@ -141,11 +141,20 @@
   <data name="Man" xml:space="preserve">
     <value>Male</value>
   </data>
+  <data name="Overig" xml:space="preserve">
+    <value>Remaining</value>
+  </data>
   <data name="Professioneel" xml:space="preserve">
     <value>Professional</value>
   </data>
   <data name="Registreer" xml:space="preserve">
     <value>Register</value>
+  </data>
+  <data name="Retail" xml:space="preserve">
+    <value>Retail</value>
+  </data>
+  <data name="SemiProfessioneel" xml:space="preserve">
+    <value>Semi-professional</value>
   </data>
   <data name="Student" xml:space="preserve">
     <value>Student</value>

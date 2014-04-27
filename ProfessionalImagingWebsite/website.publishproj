@@ -18,10 +18,10 @@ Copyright (C) Microsoft Corporation. All rights reserved.
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{473afba0-d289-4f22-b316-f397317814a3}</ProjectGuid>
     <SourceWebPhysicalPath>$(MSBuildThisFileDirectory)</SourceWebPhysicalPath>
-    <SourceWebVirtualPath>/ProfessionalImaging</SourceWebVirtualPath>
+    <SourceWebVirtualPath>/ProfessionalImagingWebsite</SourceWebVirtualPath>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SourceWebProject>http://localhost:1428</SourceWebProject>
-    <SourceWebMetabasePath>/IISExpress/7.5/LM/W3SVC/4/ROOT</SourceWebMetabasePath>
+    <SourceWebProject>http://localhost:50313</SourceWebProject>
+    <SourceWebMetabasePath>/IISExpress/7.5/LM/W3SVC/6/ROOT</SourceWebMetabasePath>
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -42,9 +42,9 @@ Copyright (C) Microsoft Corporation. All rights reserved.
     </AssemblyAttributes>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\GitHub\DoggieCreationsFramework\DoggieCreationsFramework\DoggieCreationsFramework.csproj">
-      <Project>{252E13B3-B6AD-451A-9787-2B82B33C833F}</Project>
-      <Name>DoggieCreationsFramework</Name>
+    <ProjectReference Include="..\ProfessionalImaging\ProfessionalImagingDataBase.sqlproj">
+      <Project>{039E38D3-F568-40D1-9BA7-2755C9BC590F}</Project>
+      <Name>ProfessionalImagingDataBase</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(_WebPublishTargetsPath)\Web\Microsoft.WebSite.Publishing.targets" />

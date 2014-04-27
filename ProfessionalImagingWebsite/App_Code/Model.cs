@@ -21,4 +21,9 @@ public partial class Attendee
     public bool HasCoupon { get; set; }
     public bool HasPaid { get; set; }
     public string Contract { get; set; }
+    public int Zaterdag { get; set; }
+    public int Zondag { get; set; }
+    public int Maandag { get; set; }
+    public int PassePartout { get; set; }
+    public byte[] Barcode { get; set; }
 }

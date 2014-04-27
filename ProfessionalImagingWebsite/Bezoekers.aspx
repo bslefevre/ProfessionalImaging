@@ -9,12 +9,34 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            <asp:GridView runat="server" ID="BezoekersGridView" AutoGenerateColumns="False"
+            <asp:GridView runat="server" ID="BezoekersGridView" AutoGenerateColumns="True" AutoGenerateEditButton="true"
                 OnRowEditing="BezoekersGridView_RowEditing"
                 OnRowUpdating="BezoekersGridView_RowUpdating"
-                OnRowCancelingEdit="BezoekersGridView_RowCancelingEdit">
+                OnRowCancelingEdit="BezoekersGridView_RowCancelingEdit"
+                DataKeyNames="Id,Contract"
+                OnRowCommand="BezoekersGridView_RowCommand">
                 <Columns>
                     <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:LinkButton Text="Mail" ID="SendMail" runat="server" CommandName="SendMail" CommandArgument='<%# Bind("Id") %>' />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:LinkButton ID="GenereerCouponLinkButton" CommandName="GenereerCoupon" CommandArgument='<%# Bind("Id") %>' Text="Genereer coupon" runat="server" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:LinkButton ID="GenereerPdfLinkButton" CommandName="GenereerPdf" CommandArgument='<%# Bind("Id") %>' Text="Genereer PDF" runat="server" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:Image runat="server" ImageUrl='<%# GetImage(Eval("Barcode")) %>' />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <%--<asp:TemplateField>
                         <ItemTemplate>
                             <asp:LinkButton Text="Edit" runat="server" CommandName="Edit" />
                         </ItemTemplate>
@@ -69,7 +91,7 @@
                         </ItemTemplate>
                     </asp:TemplateField>
 
-                    <asp:TemplateField HeaderText="Genereer coupon"></asp:TemplateField>
+                    <asp:TemplateField HeaderText="Genereer coupon"></asp:TemplateField>--%>
                 </Columns>
             </asp:GridView>
         </div>

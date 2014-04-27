@@ -12,6 +12,8 @@ using System.Globalization;
 using System.Threading;
 using System.Web.Caching;
 using System.Security.Cryptography;
+using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 
 public partial class _Default : System.Web.UI.Page
 {
@@ -65,6 +67,8 @@ public partial class _Default : System.Web.UI.Page
             DDL.SelectedValue = Cache.Get(SelectedCulture).ToString();
 
         SetResources();
+
+        RegistreerDropDown();
     }
 
     private void SetResources()
@@ -79,6 +83,8 @@ public partial class _Default : System.Web.UI.Page
 
     public void FormOnSubmit(object sender, EventArgs e)
     {
+        var controls = ZaterdagTextBox.Value;
+        
         var bedrijfsnaam = Bedrijfsnaam.Text;
         var voorletters = Voorletters.Text;
         var achternaam = Achternaam.Text;
@@ -184,4 +190,38 @@ public partial class _Default : System.Web.UI.Page
         InitializeCulture();
         SetResources();
     }
+
+    public void RegistreerDropDown()
+    {
+        var dropDownCollection = new Collection<DropDown>();
+        dropDownCollection.Add(new DropDown { Text = "0", Value = 0, Selected = false, Description = "0 kaarten" });
+        dropDownCollection.Add(new DropDown { Text = "1", Value = 1, Selected = false, Description = "1 kaart" });
+        dropDownCollection.Add(new DropDown { Text = "2", Value = 2, Selected = false, Description = "2 kaarten" });
+        dropDownCollection.Add(new DropDown { Text = "3", Value = 3, Selected = false, Description = "3 kaarten" });
+        dropDownCollection.Add(new DropDown { Text = "4", Value = 4, Selected = false, Description = "4 kaarten" });
+        dropDownCollection.Add(new DropDown { Text = "5", Value = 5, Selected = false, Description = "5 kaarten" });
+        dropDownCollection.Add(new DropDown { Text = "6", Value = 6, Selected = false, Description = "6 kaarten" });
+        dropDownCollection.Add(new DropDown { Text = "7", Value = 7, Selected = false, Description = "7 kaarten" });
+        dropDownCollection.Add(new DropDown { Text = "8", Value = 8, Selected = false, Description = "8 kaarten" });
+        dropDownCollection.Add(new DropDown { Text = "9", Value = 9, Selected = false, Description = "9 kaarten" });
+
+        var result = JsonConvert.SerializeObject(dropDownCollection, Formatting.None);
+
+        var data = string.Format("var ddData = {0}", result);
+        ClientScript.RegisterClientScriptBlock(this.GetType(), "DropDown", data, true);
+    }
+}
+
+public class DropDown
+{
+    [JsonProperty("text")]
+    public string Text { get; set; }
+    [JsonProperty("value")]
+    public int Value { get; set; }
+    [JsonProperty("selected")]
+    public bool Selected { get; set; }
+    [JsonProperty("description")]
+    public string Description { get; set; }
+    [JsonProperty("imageSrc")]
+    public string ImageSrc { get; set; }
 }

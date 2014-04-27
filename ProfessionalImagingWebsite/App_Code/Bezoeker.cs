@@ -43,4 +43,18 @@ public static class Bezoeker
 
         return HaalOp(result.Id);
     }
+
+    public static string GeefLangeId(string id)
+    {
+        return id.PadLeft(10, '0');
+    }
+
+    public static byte[] GeefBarcode(int id , byte[] barcode)
+    {
+        if (barcode == null || barcode.Length == 0)
+        {
+            return Barcode.Create(GeefLangeId(id.ToString()));
+        }
+        return barcode;
+    }
 }

@@ -26,12 +26,16 @@
                 <asp:View runat="server" OnDeactivate="SecondView_Deactivate">
                     <div>
                         <fieldset class="checkboxes">
-                            <label class="label_check" for="checkbox-01">
-                                <input name="sample-checkbox-01" id="checkbox-01" value="1" type="checkbox" checked /><%= (string)GetGlobalResourceObject("Resource", "Professioneel") %></label>
-                            <label class="label_check" for="checkbox-02">
-                                <input name="sample-checkbox-02" id="checkbox-02" value="1" type="checkbox" /><%= (string)GetGlobalResourceObject("Resource", "Amateur") %></label>
-                            <label class="label_check" for="checkbox-03">
-                                <input name="sample-checkbox-03" id="checkbox-03" value="1" type="checkbox" /><%= (string)GetGlobalResourceObject("Resource", "Student") %></label>
+                            <label class="label_check" for="CheckBoxProfessional">
+                                <asp:CheckBox ID="CheckBoxProfessional" runat="server" /><%= (string)GetGlobalResourceObject("Resource", "Professioneel") %></label>
+                            <label class="label_check" for="CheckBoxSemiProfessional">
+                                <asp:CheckBox ID="CheckBoxSemiProfessional" runat="server" /><%= (string)GetGlobalResourceObject("Resource", "SemiProfessioneel") %></label>
+                            <label class="label_check" for="CheckBoxRetail">
+                                <asp:CheckBox ID="CheckBoxRetail" runat="server" /><%= (string)GetGlobalResourceObject("Resource", "Retail") %></label>
+                            <label class="label_check" for="CheckBoxStudent">
+                                <asp:CheckBox ID="CheckBoxStudent" runat="server" /><%= (string)GetGlobalResourceObject("Resource", "Student") %></label>
+                            <label class="label_check" for="CheckBoxOverig">
+                                <asp:CheckBox ID="CheckBoxOverig" runat="server" /><%= (string)GetGlobalResourceObject("Resource", "Overig") %></label>
                         </fieldset>
                         <fieldset class="radios" runat="server" id="RadioFieldset">
                             <label runat="server" id="Label1" class="label_radio" for="Radio01">
@@ -41,11 +45,20 @@
                                 <asp:RadioButton runat="server" ID="Radio02" GroupName="Gender" /><%= (string)GetGlobalResourceObject("Resource", "Vrouw") %>
                             </label>
                         </fieldset>
+                        <div id="zaterdag"></div>
+                        <div id="zondag"></div>
+                        <div id="maandag"></div>
+                        <div id="passepartout"></div>
+                        <asp:HiddenField ID="ZaterdagTextBox" runat="server" />
+                        <asp:HiddenField ID="ZondagTextBox" runat="server" />
+                        <asp:HiddenField ID="MaandagTextBox" runat="server" />
+                        <asp:HiddenField ID="PassePartoutTextBox" runat="server" />
                         <asp:TextBox CssClass="TestClass" ID="Bedrijfsnaam" runat="server" autocomplete="off" /><br />
                         <asp:TextBox CssClass="TestClass" ID="Voorletters" runat="server" autocomplete="off" /><br />
                         <asp:TextBox CssClass="TestClass" ID="Achternaam" runat="server" autocomplete="off" /><br />
                         <asp:CustomValidator runat="server" OnServerValidate="Email_ServerValidate" ControlToValidate="Emailadres" Display="Dynamic" />
                         <asp:TextBox CssClass="TestClass" ID="Emailadres" runat="server" autocomplete="off" /><br />
+                        <asp:TextBox Rows="1" ID="TotaalText" style="resize:none; background-color:white; display:none" runat="server" TextMode="MultiLine" CssClass="TestClass" Enabled="false" ReadOnly="true" />
                         <asp:Button type="submit" ID="RegistreerButton" runat="server" OnClick="FormOnSubmit" CommandName="PrevView" CssClass="button super" CausesValidation="true" />
                     </div>
                 </asp:View>
@@ -59,5 +72,7 @@
     </div>
 
     <script src="js/RadioAndCheckButton.js"></script>
+    <script type="text/javascript" src="js/jquery.ddslick.min.js"></script>
+    <script src="js/DropDown.js"></script>
 </body>
 </html>
