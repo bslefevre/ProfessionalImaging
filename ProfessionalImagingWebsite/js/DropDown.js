@@ -2,11 +2,11 @@
 var width = 620;
 
 $('#zaterdag').ddslick({
-    data: ddData,
+    data: ddDataZaterdag,
     width: width,
     background: background,
     imagePosition: "left",
-    selectText: "Aantal zaterdag",
+    selectText: aantal + ' ' + zaterdag,
     onSelected: function (data) {
         $('#ZaterdagTextBox').val(data.selectedIndex);
         TotaalSom();
@@ -14,11 +14,11 @@ $('#zaterdag').ddslick({
 });
 
 $('#zondag').ddslick({
-    data: ddData,
+    data: ddDataZondag,
     width: width,
     background: background,
     imagePosition: "left",
-    selectText: "Aantal zondag",
+    selectText: aantal + ' ' + zondag,
     onSelected: function (data) {
         $('#ZondagTextBox').val(data.selectedIndex);
         TotaalSom();
@@ -26,11 +26,11 @@ $('#zondag').ddslick({
 });
 
 $('#maandag').ddslick({
-    data: ddData,
+    data: ddDataMaandag,
     width: width,
     background: background,
     imagePosition: "left",
-    selectText: "Aantal maandag",
+    selectText: aantal + ' ' + maandag,
     onSelected: function (data) {
         $('#MaandagTextBox').val(data.selectedIndex);
         TotaalSom();
@@ -38,11 +38,11 @@ $('#maandag').ddslick({
 });
 
 $('#passepartout').ddslick({
-    data: ddData,
+    data: ddDataPassePartout,
     width: width,
     background: background,
     imagePosition: "left",
-    selectText: "Aantal passe-partouts",
+    selectText: aantal + ' ' + passePartouts,
     onSelected: function (data) {
         $('#PassePartoutTextBox').val(data.selectedIndex);
         TotaalSom();
@@ -53,41 +53,41 @@ $('#passepartout').ddslick({
 function TotaalSom() {
     var ob = $('#TotaalText');
 
-    var zaterdag = $('#zaterdag').data('ddslick').selectedData != null ? $('#zaterdag').data('ddslick').selectedData.value : 0;
-    var zondag = $('#zondag').data('ddslick').selectedData != null ? $('#zondag').data('ddslick').selectedData.value : 0;
-    var maandag = $('#maandag').data('ddslick').selectedData != null ? $('#maandag').data('ddslick').selectedData.value : 0;
-    var passepartout = $('#passepartout').data('ddslick').selectedData != null ? $('#passepartout').data('ddslick').selectedData.value : 0;
+    var zaterdagValue = GetSelectedValue('#zaterdag');
+    var zondagValue = GetSelectedValue('#zondag');
+    var maandagValue = GetSelectedValue('#maandag');
+    var passepartoutValue = GetSelectedValue('#passepartout');
 
-    var totaalZaterdag = 10 * zaterdag;
-    var totaalZondag = 10 * zondag;
-    var totaalMaandag = 10 * maandag;
-    var totaalPassepartout = 20 * passepartout;
-    var totaal = totaalZaterdag + totaalZondag + totaalMaandag + totaalPassepartout;
+    var totaalZaterdag = 10 * zaterdagValue;
+    var totaalZondag = 10 * zondagValue;
+    var totaalMaandag = 10 * maandagValue;
+    var totaalPassepartout = 20 * passepartoutValue;
+    var totaalSamen = totaalZaterdag + totaalZondag + totaalMaandag + totaalPassepartout;
     var count = 0;
     var text = "";
     if (totaalZaterdag > 0)
     {
-        text = "Zaterdag: €" + totaalZaterdag + ",-\n";
+        text = Capitalize(zaterdag) + ": €" + totaalZaterdag + ",-\n";
         count++;
     }
     if (totaalZondag > 0)
     {
-        text += "Zondag: €" + totaalZondag + ",-\n";
+        text += Capitalize(zondag) + ": €" + totaalZondag + ",-\n";
         count++;
     }
     if (totaalMaandag > 0)
     {
-        text += "Maandag: €" + totaalMaandag + ",-\n";
+        text += Capitalize(maandag) + ": €" + totaalMaandag + ",-\n";
         count++;
     }
     if (totaalPassepartout > 0)
     {
-        text += "Passe-partout: €" + totaalPassepartout + ",-\n";
+        text += Capitalize(passePartouts) + ": €" + totaalPassepartout + ",-\n";
         count++;
     }
-    if (totaal > 0)
+    if (totaalSamen > 0)
     {
-        text += "Totaal: €" + totaal + ",-";
+        text += Capitalize(totaal) + ": €" + totaalSamen + ",-";
         count++;
     }
 
@@ -101,4 +101,12 @@ function TotaalSom() {
     }
     
     $('#TotaalText').val(text);
+}
+
+function Capitalize(s) {
+    return s[0].toUpperCase() + s.slice(1);
+}
+
+function GetSelectedValue(id){
+    return $(id).data('ddslick') != null ? $(id).data('ddslick').selectedData != null ? $(id).data('ddslick').selectedData.value : 0 : 0;
 }

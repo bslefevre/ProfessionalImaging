@@ -14,7 +14,7 @@ public static class Email
                 new MailAddress(attendee.Emailaddress, string.Format("{0} {1}", attendee.Initials, attendee.Surname)));
         var client = new SmtpClient("smtp.gmail.com", 587)
         {
-            Credentials = new NetworkCredential("doggiehostmaster@gmail.com", "kj94km6112"),
+            Credentials = new NetworkCredential("doggiehostmaster@gmail.com", "PASSWORD"),
             EnableSsl = true
         };
         mail.Subject = "Registratie";

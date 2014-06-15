@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,6 +105,14 @@ public partial class Bezoekers : System.Web.UI.Page
         switch (e.CommandName)
         {
             case "GenereerCoupon":
+                using (var obj = new ProfessionalImagingEntity())
+                {
+                    var attendee = obj.Attendee.Find(Convert.ToInt32(id));
+                    if (attendee == null) return;
+                    var coupon = Crypto.Encrypt(Bezoeker.GeefLangeId(id.ToString()));
+
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "Alert", string.Format("alert('{0}');", coupon), true);
+                }
                 break;
             case "GenereerPdf":
                 var image = Barcode.Create(Bezoeker.GeefLangeId(id.ToString()));

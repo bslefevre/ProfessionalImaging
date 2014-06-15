@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="Attendee.sql" />
+    <Build Include="Profession.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="ProfessionalImagingDataBase.refactorlog" />

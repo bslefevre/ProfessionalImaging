@@ -1,16 +1,30 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
 
 public static class Bezoeker
 {
-    public static Exception Registreer(int professie, string bedrijfsnaam, string voorletters, string achternaam, string emailAdres)
+    public static Exception Registreer(string bedrijfsnaam, string voorletters, string achternaam, string emailAdres, Profession profession, int zaterdag, int zondag, int maandag, int passepartout)
     {
         if (DoggieCreationsSettings.InTest) return null;
-        var attendee = new Attendee { Contract = DoggieCreationsSettings.CompanyName, Company = bedrijfsnaam, Profession = professie, Initials = voorletters, Surname = achternaam, Emailaddress = emailAdres };
-
+        var attendee = new Attendee
+        {
+            Contract = DoggieCreationsSettings.CompanyName,
+            Company = bedrijfsnaam,
+            Initials = voorletters,
+            Surname = achternaam,
+            Emailaddress = emailAdres,
+            AttendeeProfession = profession,
+            Zaterdag = zaterdag,
+            Zondag = zondag,
+            Maandag = maandag,
+            PassePartout = passepartout
+        };
+        
         using (var obj = new ProfessionalImagingEntity())
         {
             obj.Attendee.Add(attendee);
@@ -18,9 +32,15 @@ public static class Bezoeker
             {
                 obj.SaveChanges();
             }
-            catch (Exception e)
+            catch (DbEntityValidationException e)
             {
-                return e;
+                var entityValidationError = e.EntityValidationErrors.FirstOrDefault();
+                var message = string.Empty;
+                foreach(var validationError in entityValidationError.ValidationErrors)
+                {
+                    message += string.Format("{0}{1}", validationError.ErrorMessage, Environment.NewLine);
+                }
+                return new Exception(message);
             }
         }
 
@@ -31,17 +51,18 @@ public static class Bezoeker
     {
         using (var obj = new ProfessionalImagingEntity())
         {
-            return obj.Attendee.Find(id);
+            return obj.Attendee.Include(x => x.AttendeeProfession).FirstOrDefault(x => x.Id == id);
         }
     }
 
     public static Attendee HaalOp(string message)
     {
-        var json = Crypto.DecryptString(message, DoggieCreationsSettings.PassWord);
-        
-        var result = JsonConvert.DeserializeObject<Attendee>(json);
+        var message2 = HttpUtility.UrlEncode(message);
 
-        return HaalOp(result.Id);
+        var result = Crypto.Decrypt(message);
+        var id = Convert.ToInt32(result);
+
+        return HaalOp(id);
     }
 
     public static string GeefLangeId(string id)

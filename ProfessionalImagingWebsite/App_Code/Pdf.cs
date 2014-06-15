@@ -47,11 +47,15 @@ public static class Pdf
         gfx.DrawString(string.Format("Onderstaande barcode heeft uniek nummer: {0}", id), font, XBrushes.Black,
           new XRect(20, 20, 200, 20),
           XStringFormats.TopLeft);
-
+        
         string windowsTempPath = Path.GetTempPath();
-        var image = Image.FromStream(new MemoryStream(barcode));
         var fileLocation = string.Format("{0}{1}.jpg", windowsTempPath, id);
-        image.Save(fileLocation);
+        
+        using (var image = Image.FromStream(new MemoryStream(barcode)))
+        {
+            image.Save(fileLocation);
+        }
+        
         var xImage = XImage.FromFile(fileLocation);
         gfx.DrawImage(xImage, new XRect(20, 40, xImage.PixelWidth, xImage.PixelHeight));
 

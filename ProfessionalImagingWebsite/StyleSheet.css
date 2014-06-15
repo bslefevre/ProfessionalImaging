@@ -278,3 +278,10 @@ label.r_on {
     bottom: 0;
 }
 /*END Bottom Left*/
+/*BEGIN Custom CSS*/
+.ErrorText{
+    margin-top: 10px;
+    font-weight: 700;
+    color: red;
+}
+/*END Custom CSS*/

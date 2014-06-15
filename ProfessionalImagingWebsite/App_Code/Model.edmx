@@ -12,7 +12,6 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Contract" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Company" Type="varchar" MaxLength="200" />
-          <Property Name="Profession" Type="int" />
           <Property Name="Initials" Type="varchar" MaxLength="50" />
           <Property Name="Surname" Type="varchar" MaxLength="100" />
           <Property Name="Emailaddress" Type="varchar" MaxLength="200" />
@@ -24,8 +23,38 @@
           <Property Name="PassePartout" Type="int" Nullable="false" />
           <Property Name="Barcode" Type="image" />
         </EntityType>
+        <EntityType Name="Profession">
+          <Key>
+            <PropertyRef Name="Attendee_Id" />
+          </Key>
+          <Property Name="Attendee_Id" Type="int" Nullable="false" />
+          <Property Name="Professional" Type="bit" />
+          <Property Name="SemiProfessional" Type="bit" />
+          <Property Name="Retail" Type="bit" />
+          <Property Name="Student" Type="bit" />
+          <Property Name="Overig" Type="bit" />
+        </EntityType>
+        <Association Name="FK_Profession_ToAttendee">
+          <End Role="Attendee" Type="Self.Attendee" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Profession" Type="Self.Profession" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Attendee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Profession">
+              <PropertyRef Name="Attendee_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ProfessionalImagingModelStoreContainer">
           <EntitySet Name="Attendee" EntityType="Self.Attendee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Profession" EntityType="Self.Profession" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Profession_ToAttendee" Association="Self.FK_Profession_ToAttendee">
+            <End Role="Attendee" EntitySet="Attendee" />
+            <End Role="Profession" EntitySet="Profession" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -37,7 +66,6 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Company" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Profession" Type="Int32" />
           <Property Name="Initials" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Surname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Emailaddress" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
@@ -49,10 +77,42 @@
           <Property Name="Maandag" Type="Int32" Nullable="false" />
           <Property Name="PassePartout" Type="Int32" Nullable="false" />
           <Property Name="Barcode" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="AttendeeProfession" Relationship="ProfessionalImagingModel.FK_Profession_ToAttendee" FromRole="Attendee" ToRole="Profession" />
         </EntityType>
         <EntityContainer Name="ProfessionalImagingEntity" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Attendee" EntityType="Self.Attendee" />
+          <EntitySet Name="Profession" EntityType="ProfessionalImagingModel.Profession" />
+          <AssociationSet Name="FK_Profession_ToAttendee" Association="ProfessionalImagingModel.FK_Profession_ToAttendee">
+            <End Role="Attendee" EntitySet="Attendee" />
+            <End Role="Profession" EntitySet="Profession" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Profession">
+          <Key>
+            <PropertyRef Name="Attendee_Id" />
+          </Key>
+          <Property Name="Attendee_Id" Type="Int32" Nullable="false" />
+          <Property Name="Professional" Type="Boolean" />
+          <Property Name="SemiProfessional" Type="Boolean" />
+          <Property Name="Retail" Type="Boolean" />
+          <Property Name="Student" Type="Boolean" />
+          <Property Name="Overig" Type="Boolean" />
+          <NavigationProperty Name="Attendee" Relationship="ProfessionalImagingModel.FK_Profession_ToAttendee" FromRole="Profession" ToRole="Attendee" />
+        </EntityType>
+        <Association Name="FK_Profession_ToAttendee">
+          <End Type="ProfessionalImagingModel.Attendee" Role="Attendee" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ProfessionalImagingModel.Profession" Role="Profession" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Attendee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Profession">
+              <PropertyRef Name="Attendee_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -71,11 +131,22 @@
                 <ScalarProperty Name="HasPaid" ColumnName="HasPaid" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Company" ColumnName="Company" />
-                <ScalarProperty Name="Profession" ColumnName="Profession" />
                 <ScalarProperty Name="Initials" ColumnName="Initials" />
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
                 <ScalarProperty Name="Emailaddress" ColumnName="Emailaddress" />
                 <ScalarProperty Name="HasCoupon" ColumnName="HasCoupon" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Profession">
+            <EntityTypeMapping TypeName="ProfessionalImagingModel.Profession">
+              <MappingFragment StoreEntitySet="Profession">
+                <ScalarProperty Name="Overig" ColumnName="Overig" />
+                <ScalarProperty Name="Student" ColumnName="Student" />
+                <ScalarProperty Name="Retail" ColumnName="Retail" />
+                <ScalarProperty Name="SemiProfessional" ColumnName="SemiProfessional" />
+                <ScalarProperty Name="Professional" ColumnName="Professional" />
+                <ScalarProperty Name="Attendee_Id" ColumnName="Attendee_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -3,7 +3,6 @@
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [Contract] VARCHAR(50) NOT NULL, 
 	[Company] VARCHAR(200) NULL,
-    [Profession] INT NULL, 
     [Initials] VARCHAR(50) NULL, 
     [Surname] VARCHAR(100) NULL, 
     [Emailaddress] VARCHAR(200) NULL, 

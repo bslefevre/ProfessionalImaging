@@ -24,4 +24,5 @@ public partial class ProfessionalImagingEntity : DbContext
     }
 
     public virtual DbSet<Attendee> Attendee { get; set; }
+    public virtual DbSet<Profession> Profession { get; set; }
 }

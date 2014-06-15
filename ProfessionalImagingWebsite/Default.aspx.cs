@@ -14,6 +14,7 @@ using System.Web.Caching;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using Resources;
 
 public partial class _Default : System.Web.UI.Page
 {
@@ -46,32 +47,35 @@ public partial class _Default : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        RadioFieldset.Visible = false;
+
+        if (!IsPostBack && Cache.Get(SelectedCulture) != null)
+            DDL.SelectedValue = Cache.Get(SelectedCulture).ToString();
+        
         var query = Request.QueryString["coupon"];
+        Attendee bezoeker = null;
         if (!string.IsNullOrEmpty(query))
         {
-            var bezoeker = Bezoeker.HaalOp(query);
+            bezoeker = Bezoeker.HaalOp(query);
             if (bezoeker != null)
             {
+                CheckBoxProfessional.Checked = bezoeker.AttendeeProfession.Professional ?? false;
+                CheckBoxSemiProfessional.Checked = bezoeker.AttendeeProfession.SemiProfessional ?? false;
+                CheckBoxRetail.Checked = bezoeker.AttendeeProfession.Retail ?? false;
+                CheckBoxStudent.Checked = bezoeker.AttendeeProfession.Student ?? false;
+                CheckBoxOverig.Checked = bezoeker.AttendeeProfession.Overig ?? false;
+
                 Bedrijfsnaam.Text = bezoeker.Company;
                 Voorletters.Text = bezoeker.Initials;
                 Achternaam.Text = bezoeker.Surname;
             }
         }
-        //ShowMessage(MessageType.Warning, Crypto.DecryptString(query, "PI2015"));
 
-        //var json = "{\"id\":\"0\"}";
-
-        RadioFieldset.Visible = false;
-
-        if (!IsPostBack && Cache.Get(SelectedCulture) != null)
-            DDL.SelectedValue = Cache.Get(SelectedCulture).ToString();
-
-        SetResources();
-
-        RegistreerDropDown();
+        SetResources(bezoeker);
+        MultiViewScreen.SetActiveView(SecondView);
     }
 
-    private void SetResources()
+    private void SetResources(Attendee attendee = null)
     {
         Bedrijfsnaam.Attributes["placeholder"] = Resources.Resource.Bedrijfsnaam;
         Voorletters.Attributes["placeholder"] = Resources.Resource.Voorletters;
@@ -79,19 +83,35 @@ public partial class _Default : System.Web.UI.Page
         Emailadres.Attributes["placeholder"] = Resources.Resource.Emailadres;
         RegistreerButton.Text = Resources.Resource.Registreer;
         RegistratieKnop.Text = Resources.Resource.HomeRegistreer;
+        RegistreerDropDown(attendee);
     }
 
     public void FormOnSubmit(object sender, EventArgs e)
     {
-        var controls = ZaterdagTextBox.Value;
-        
+        if (!Page.IsValid) return;
+
+        int zaterdag = string.IsNullOrEmpty(ZaterdagTextBox.Value) ? 0 : Convert.ToInt16(ZaterdagTextBox.Value);
+        int zondag = string.IsNullOrEmpty(ZondagTextBox.Value) ? 0 : Convert.ToInt16(ZondagTextBox.Value);
+        int maandag = string.IsNullOrEmpty(MaandagTextBox.Value) ? 0 : Convert.ToInt16(MaandagTextBox.Value);
+        int passepartout = string.IsNullOrEmpty(PassePartoutTextBox.Value) ? 0 : Convert.ToInt16(PassePartoutTextBox.Value);
+
+        var profession = new Profession();
+        profession.Professional = CheckBoxProfessional.Checked;
+        profession.SemiProfessional = CheckBoxSemiProfessional.Checked;
+        profession.Retail = CheckBoxRetail.Checked;
+        profession.Student = CheckBoxStudent.Checked;
+        profession.Overig = CheckBoxOverig.Checked;
+
         var bedrijfsnaam = Bedrijfsnaam.Text;
         var voorletters = Voorletters.Text;
         var achternaam = Achternaam.Text;
         var emailAdres = Emailadres.Text;
-        var exception = Bezoeker.Registreer(1, bedrijfsnaam, voorletters, achternaam, emailAdres);
+        var exception = Bezoeker.Registreer(
+            bedrijfsnaam, voorletters, achternaam, emailAdres, profession, zaterdag, zondag, maandag, passepartout);
         if (exception != null)
+        {
             ShowMessage(MessageType.Error, exception.Message);
+        }
         else
         {
             var message = Resources.Resource.SuccessMessage.Formatteer(() => new[] { voorletters, achternaam });
@@ -138,16 +158,13 @@ public partial class _Default : System.Web.UI.Page
         CustomValidator cv = source as CustomValidator;
         cv.ErrorMessage = args.IsValid ? string.Empty : "E-mailadres is niet juist";
         cv.Text = args.IsValid ? string.Empty : "E-mailadres is niet juist";
-
-        ShowMessage(MessageType.Warning);
     }
 
     private void ShowMessage(string messageType, string message)
     {
         MessageDiv.InnerHtml = message;
         MessageDiv.Attributes["class"] = string.Format("message {0}", messageType);
-
-        ClientScript.RegisterClientScriptBlock(this.GetType(), "Sleutel", "showMessageTrigger()", true);
+        ClientScript.RegisterClientScriptBlock(this.GetType(), "Sleutel", "showMessageTrigger();", true);
     }
 
     private void ShowMessage(string messageType)
@@ -189,26 +206,55 @@ public partial class _Default : System.Web.UI.Page
 
         InitializeCulture();
         SetResources();
+        ClientScript.RegisterClientScriptBlock(this.GetType(), "Reload", "location.reload()", true);
     }
 
-    public void RegistreerDropDown()
+    public void RegistreerDropDown(Attendee attendee = null)
+    {
+        var zaterdagDropdown = CreateDropDownData(attendee != null ? attendee.Zaterdag : (int?)null);
+        var zondagDropdown = CreateDropDownData(attendee != null ? attendee.Zondag : (int?)null);
+        var maandagDropdown = CreateDropDownData(attendee != null ? attendee.Maandag : (int?)null);
+        var passePartoutDropdown = CreateDropDownData(attendee != null ? attendee.PassePartout : (int?)null);
+
+
+        var dagen = string.Format("var zaterdag = '{0}'; var zondag = '{1}'; var maandag = '{2}'; var passePartouts = '{3}'; var aantal = '{4}'; var totaal = '{5}';"
+            , Resource.Zaterdag, Resource.Zondag, Resource.Maandag, Resource.PassePartouts, Resource.Aantal, Resource.Totaal);
+
+        var data = string.Format("{0} var ddDataZaterdag = {1}; var ddDataZondag = {2}; var ddDataMaandag = {3}; var ddDataPassePartout = {4}; "
+            , dagen, zaterdagDropdown, zondagDropdown, maandagDropdown, passePartoutDropdown);
+
+        ClientScript.RegisterClientScriptBlock(this.GetType(), "DropDown", data, true);
+    }
+
+    protected string CreateDropDownData(int? selectedValue = null)
     {
         var dropDownCollection = new Collection<DropDown>();
-        dropDownCollection.Add(new DropDown { Text = "0", Value = 0, Selected = false, Description = "0 kaarten" });
-        dropDownCollection.Add(new DropDown { Text = "1", Value = 1, Selected = false, Description = "1 kaart" });
-        dropDownCollection.Add(new DropDown { Text = "2", Value = 2, Selected = false, Description = "2 kaarten" });
-        dropDownCollection.Add(new DropDown { Text = "3", Value = 3, Selected = false, Description = "3 kaarten" });
-        dropDownCollection.Add(new DropDown { Text = "4", Value = 4, Selected = false, Description = "4 kaarten" });
-        dropDownCollection.Add(new DropDown { Text = "5", Value = 5, Selected = false, Description = "5 kaarten" });
-        dropDownCollection.Add(new DropDown { Text = "6", Value = 6, Selected = false, Description = "6 kaarten" });
-        dropDownCollection.Add(new DropDown { Text = "7", Value = 7, Selected = false, Description = "7 kaarten" });
-        dropDownCollection.Add(new DropDown { Text = "8", Value = 8, Selected = false, Description = "8 kaarten" });
-        dropDownCollection.Add(new DropDown { Text = "9", Value = 9, Selected = false, Description = "9 kaarten" });
+        dropDownCollection.Add(new DropDown { Text = "0", Value = 0, Selected = false, Description = Resource.XKaarten.Formatteer("0") });
+        dropDownCollection.Add(new DropDown { Text = "1", Value = 1, Selected = false, Description = Resource.XKaart.Formatteer("1") });
+        dropDownCollection.Add(new DropDown { Text = "2", Value = 2, Selected = false, Description = Resource.XKaarten.Formatteer("2") });
+        dropDownCollection.Add(new DropDown { Text = "3", Value = 3, Selected = false, Description = Resource.XKaarten.Formatteer("3") });
+        dropDownCollection.Add(new DropDown { Text = "4", Value = 4, Selected = false, Description = Resource.XKaarten.Formatteer("4") });
+        dropDownCollection.Add(new DropDown { Text = "5", Value = 5, Selected = false, Description = Resource.XKaarten.Formatteer("5") });
+        dropDownCollection.Add(new DropDown { Text = "6", Value = 6, Selected = false, Description = Resource.XKaarten.Formatteer("6") });
+        dropDownCollection.Add(new DropDown { Text = "7", Value = 7, Selected = false, Description = Resource.XKaarten.Formatteer("7") });
+        dropDownCollection.Add(new DropDown { Text = "8", Value = 8, Selected = false, Description = Resource.XKaarten.Formatteer("8") });
+        dropDownCollection.Add(new DropDown { Text = "9", Value = 9, Selected = false, Description = Resource.XKaarten.Formatteer("9") });
 
-        var result = JsonConvert.SerializeObject(dropDownCollection, Formatting.None);
+        if (selectedValue.HasValue)
+            dropDownCollection.FirstOrDefault(x => x.Value == selectedValue.Value).Selected = true;
 
-        var data = string.Format("var ddData = {0}", result);
-        ClientScript.RegisterClientScriptBlock(this.GetType(), "DropDown", data, true);
+        return JsonConvert.SerializeObject(dropDownCollection, Formatting.None);
+    }
+    
+    protected void PersoonsInformatie_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        CustomValidator cv = source as CustomValidator;
+        var textBox = SecondView.Controls.OfType<TextBox>().FirstOrDefault(x => x.ID == cv.ControlToValidate);
+        var label = textBox.Attributes["placeholder"];
+        args.IsValid = !string.IsNullOrEmpty(textBox.Text);
+        var errorMessage = string.Format("{0} is verplicht.", label);
+        cv.ErrorMessage = errorMessage;
+        cv.Text = errorMessage;
     }
 }
 

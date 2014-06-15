@@ -23,7 +23,7 @@
                         <asp:LinkButton ID="RegistratieKnop" CssClass="superLarge button pink" runat="server" CommandName="NextView" />
                     </div>
                 </asp:View>
-                <asp:View runat="server" OnDeactivate="SecondView_Deactivate">
+                <asp:View ID="SecondView" runat="server" OnDeactivate="SecondView_Deactivate">
                     <div>
                         <fieldset class="checkboxes">
                             <label class="label_check" for="CheckBoxProfessional">
@@ -45,7 +45,7 @@
                                 <asp:RadioButton runat="server" ID="Radio02" GroupName="Gender" /><%= (string)GetGlobalResourceObject("Resource", "Vrouw") %>
                             </label>
                         </fieldset>
-                        <div id="zaterdag"></div>
+                        <div id="zaterdag" runat="server"></div>
                         <div id="zondag"></div>
                         <div id="maandag"></div>
                         <div id="passepartout"></div>
@@ -54,9 +54,11 @@
                         <asp:HiddenField ID="MaandagTextBox" runat="server" />
                         <asp:HiddenField ID="PassePartoutTextBox" runat="server" />
                         <asp:TextBox CssClass="TestClass" ID="Bedrijfsnaam" runat="server" autocomplete="off" /><br />
+                        <asp:CustomValidator CssClass="ErrorText" runat="server" ControlToValidate="Voorletters" OnServerValidate="PersoonsInformatie_ServerValidate" Display="Dynamic" ValidateEmptyText="true" />
                         <asp:TextBox CssClass="TestClass" ID="Voorletters" runat="server" autocomplete="off" /><br />
+                        <asp:CustomValidator CssClass="ErrorText" runat="server" ControlToValidate="Achternaam" OnServerValidate="PersoonsInformatie_ServerValidate" Display="Dynamic" ValidateEmptyText="true" />
                         <asp:TextBox CssClass="TestClass" ID="Achternaam" runat="server" autocomplete="off" /><br />
-                        <asp:CustomValidator runat="server" OnServerValidate="Email_ServerValidate" ControlToValidate="Emailadres" Display="Dynamic" />
+                        <asp:CustomValidator CssClass="ErrorText" runat="server" OnServerValidate="Email_ServerValidate" ControlToValidate="Emailadres" Display="Dynamic" />
                         <asp:TextBox CssClass="TestClass" ID="Emailadres" runat="server" autocomplete="off" /><br />
                         <asp:TextBox Rows="1" ID="TotaalText" style="resize:none; background-color:white; display:none" runat="server" TextMode="MultiLine" CssClass="TestClass" Enabled="false" ReadOnly="true" />
                         <asp:Button type="submit" ID="RegistreerButton" runat="server" OnClick="FormOnSubmit" CommandName="PrevView" CssClass="button super" CausesValidation="true" />

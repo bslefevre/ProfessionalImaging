@@ -3,3 +3,12 @@ c:\users\doggie\documents\visual studio 2013\Projects\ProfessionalImaging\Profes
 c:\users\doggie\documents\visual studio 2013\Projects\ProfessionalImaging\ProfessionalImaging\obj\Debug\ProfessionalImagingDatabase.pdb
 c:\users\doggie\documents\visual studio 2013\Projects\ProfessionalImaging\ProfessionalImaging\bin\Debug\ProfessionalImagingDatabase.dll
 c:\users\doggie\documents\visual studio 2013\Projects\ProfessionalImaging\ProfessionalImaging\bin\Debug\ProfessionalImagingDatabase.pdb
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\bin\Debug\ProfessionalImagingDataBase.dacpac
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\bin\Debug\ProfessionalImagingDatabase.dll
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\bin\Debug\ProfessionalImagingDatabase.pdb
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\obj\Debug\Model.xml
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\obj\Debug\refactor.xml
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\obj\Debug\postdeploy.sql
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\obj\Debug\predeploy.sql
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\obj\Debug\ProfessionalImagingDatabase.dll
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\obj\Debug\ProfessionalImagingDatabase.pdb

@@ -14,7 +14,6 @@ public partial class Attendee
 {
     public int Id { get; set; }
     public string Company { get; set; }
-    public Nullable<int> Profession { get; set; }
     public string Initials { get; set; }
     public string Surname { get; set; }
     public string Emailaddress { get; set; }
@@ -26,4 +25,18 @@ public partial class Attendee
     public int Maandag { get; set; }
     public int PassePartout { get; set; }
     public byte[] Barcode { get; set; }
+
+    public virtual Profession AttendeeProfession { get; set; }
+}
+
+public partial class Profession
+{
+    public int Attendee_Id { get; set; }
+    public Nullable<bool> Professional { get; set; }
+    public Nullable<bool> SemiProfessional { get; set; }
+    public Nullable<bool> Retail { get; set; }
+    public Nullable<bool> Student { get; set; }
+    public Nullable<bool> Overig { get; set; }
+
+    public virtual Attendee Attendee { get; set; }
 }

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Aantal" xml:space="preserve">
+    <value>Amount</value>
+  </data>
   <data name="Achternaam" xml:space="preserve">
     <value>Surname</value>
   </data>
@@ -138,11 +141,17 @@
   <data name="HomeRegistreer" xml:space="preserve">
     <value>Register!</value>
   </data>
+  <data name="Maandag" xml:space="preserve">
+    <value>monday</value>
+  </data>
   <data name="Man" xml:space="preserve">
     <value>Male</value>
   </data>
   <data name="Overig" xml:space="preserve">
     <value>Remaining</value>
+  </data>
+  <data name="PassePartouts" xml:space="preserve">
+    <value>passe-partouts</value>
   </data>
   <data name="Professioneel" xml:space="preserve">
     <value>Professional</value>
@@ -162,10 +171,25 @@
   <data name="SuccessMessage" xml:space="preserve">
     <value>&lt;h3&gt;You are registered!&lt;/h3&gt;&lt;p&gt;Welcome {voorletters} {achternaam}.&lt;/p&gt;</value>
   </data>
+  <data name="Totaal" xml:space="preserve">
+    <value>total</value>
+  </data>
   <data name="Voorletters" xml:space="preserve">
     <value>Initials</value>
   </data>
   <data name="Vrouw" xml:space="preserve">
     <value>Female</value>
+  </data>
+  <data name="XKaart" xml:space="preserve">
+    <value>{0} ticket</value>
+  </data>
+  <data name="XKaarten" xml:space="preserve">
+    <value>{0} tickets</value>
+  </data>
+  <data name="Zaterdag" xml:space="preserve">
+    <value>saturday</value>
+  </data>
+  <data name="Zondag" xml:space="preserve">
+    <value>sunday</value>
   </data>
 </root>
