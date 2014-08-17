@@ -8,3 +8,7 @@ C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\bin\Rel
 C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\bin\Release\ProfessionalImagingDatabase.pdb
 C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\obj\Release\ProfessionalImagingDatabase.dll
 C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\obj\Release\ProfessionalImagingDatabase.pdb
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\obj\Release\Model.xml
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\obj\Release\refactor.xml
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\obj\Release\postdeploy.sql
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ProfessionalImaging\obj\Release\predeploy.sql
