@@ -1,0 +1,50 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>jQuery.post demo</title>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
+
+    <form action="" id="createNumber">
+        <input type="text" name="s" placeholder="Voer een nummer in...">
+
+        <input type="submit" value="Maak barcode nummer">
+    </form>
+    <!-- the result of the search will be rendered inside this div -->
+    <div id="result"></div>
+
+    <script>
+        // Attach a submit handler to the form
+        $("#createNumber").submit(function (event) {
+
+            // Stop form from submitting normally
+            event.preventDefault();
+
+            // Get some values from elements on the page:
+            var $form = $(this),
+              term = $form.find("input[name='s']").val(),
+              url = $form.attr("action");
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://pandora.synology.me:2015/rest/getBarcodeNumber',
+                xhrFields: {
+                    withCredentials: false
+                },
+                data: { s: term },
+                dataType: 'json',
+                success: function (data) {
+                    // alert("SUCCESS:: " + JSON.stringify(data));
+                    $("#result").text(data);
+                },
+                error: function (data) {
+                    alert("ERROR:: " + JSON.stringify(data));
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

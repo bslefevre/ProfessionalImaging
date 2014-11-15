@@ -1,0 +1,21 @@
+﻿extends layout
+
+block content
+  .jumbotron
+    h1 Bezoekers
+  .row
+    .col-xs-3
+      h4 Initialen
+    .col-xs-3
+      h4 Achternaam
+    .col-xs-3
+      h4 Emailadres
+  - var values = attendeeList;
+    each val in values.length ? values : ['There are no values']
+      .row
+        .col-xs-3
+          p= val.Initials
+        .col-xs-3
+          p= val.Surname
+        .col-xs-3
+          p= val.Emailaddress

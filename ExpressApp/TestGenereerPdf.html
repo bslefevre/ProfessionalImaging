@@ -1,0 +1,58 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>jQuery.post demo</title>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
+
+    <form action="" id="createNumber">
+
+        <input type="text" name="attendeeId" placeholder="Voer bezoeker id in..." /><br />
+
+        <input type="submit" value="Maak een PDF aan">
+    </form>
+    <!-- the result of the search will be rendered inside this div -->
+    <div id="result"></div>
+
+    <script>
+        // Attach a submit handler to the form
+        $("#createNumber").submit(function (event) {
+
+            // Stop form from submitting normally
+            event.preventDefault();
+
+            // Get some values from elements on the page:
+            var $form = $(this),
+              term = $form.find("input").val(),
+              url = $form.attr("action");
+
+            var values = {};
+            $form.find("input[type=text]").each(function () {
+                values[$(this).attr("name")] = $(this).val();
+            });
+
+            //alert(JSON.stringify(values));
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://pandora.synology.me:2015/rest/generatePdf',
+                xhrFields: {
+                    withCredentials: false
+                },
+                data: values,
+                dataType: 'json',
+                success: function (data) {
+                    //alert("SUCCESS:: " + JSON.stringify(data));
+                    $("#result").text(JSON.stringify(data));
+                },
+                error: function (data) {
+                    alert("ERROR:: " + JSON.stringify(data));
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

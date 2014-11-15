@@ -1,0 +1,21 @@
+{
+  "name": "ExpressApp",
+  "version": "0.0.0",
+  "description": "ExpressApp",
+  "main": "app.js",
+  "author": {
+    "name": "Doggie",
+    "email": ""
+  },
+  "dependencies": {
+    "0": "0.0.0",
+    "cors": "^2.5.2",
+    "cron": "^1.0.5",
+    "edge": "^0.9.3",
+    "edge-sql": "^0.1.2",
+    "express": "^3.18.3",
+    "fs": "0.0.2",
+    "jade": "*",
+    "stylus": "*"
+  }
+}

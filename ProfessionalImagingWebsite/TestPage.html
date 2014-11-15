@@ -4,13 +4,13 @@
     <script type="text/javascript">
         function soap() {
             var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST', 'http://192.168.1.116/WebService.asmx', true);
+            xmlhttp.open('POST', 'http://192.168.1.11/WebService.asmx', true);
             // build SOAP request
             var sr =
                 '<?xml version="1.0" encoding="utf-8"?>' +
                 '<soapenv:Envelope ' +
                     'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-                    'xmlns:api="http://192.168.1.116/" ' +
+                    'xmlns:api="http://192.168.1.11/" ' +
                     'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
                     'xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">' +
                     '<soapenv:Body>' +
