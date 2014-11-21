@@ -38,6 +38,9 @@ if ('development' == app.get('env')) {
 var queryPath = path.join(__dirname, 'routes', 'server-sql-query.js');
 eval(fs.readFileSync(queryPath) + '');
 
+var pdfCreator = path.join(__dirname, 'routes', 'pdfCreator.js');
+eval(fs.readFileSync(pdfCreator) + '');
+
 app.get('/', routes.index);
 app.get('/about', routes.about);
 app.get('/contact', routes.contact);
@@ -110,22 +113,22 @@ var insertAttendee = edge.func('sql', function () {/*
 */
 });
 
-var CronJob = require('cron').CronJob;
-new CronJob('0,30 * * * * *', function () {
+//var CronJob = require('cron').CronJob;
+//new CronJob('0,30 * * * * *', function () {
     
-    var currentdate = new Date();
-    var datetime = "Last Sync: " + currentdate.getDate() + "/" 
-                + (currentdate.getMonth() + 1) + "/" 
-                + currentdate.getFullYear() + " @ " 
-                + currentdate.getHours() + ":" 
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds();
+//    var currentdate = new Date();
+//    var datetime = "Last Sync: " + currentdate.getDate() + "/" 
+//                + (currentdate.getMonth() + 1) + "/" 
+//                + currentdate.getFullYear() + " @ " 
+//                + currentdate.getHours() + ":" 
+//                + currentdate.getMinutes() + ":" 
+//                + currentdate.getSeconds();
 
-    console.log('You will see this message every 30 seconds');
-    console.log('The datetime is:: ' + currentdate);
+//    console.log('You will see this message every 30 seconds');
+//    console.log('The datetime is:: ' + currentdate);
 
 
-}, null, true);
+//}, null, true);
 
 app.post('/rest/generatePdf', cors(), function (req, res) {
     var newData = {

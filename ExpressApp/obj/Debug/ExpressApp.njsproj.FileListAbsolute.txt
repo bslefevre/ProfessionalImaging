@@ -1,2 +1,2 @@
-C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ExpressApp\obj\Debug\ExpressApp.njsprojResolveAssemblyReference.cache
 C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ExpressApp\bin\Microsoft.NodejsTools.WebRole.dll
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\ExpressApp\obj\Debug\ExpressApp.njsprojResolveAssemblyReference.cache

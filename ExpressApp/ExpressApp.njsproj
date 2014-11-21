@@ -33,6 +33,7 @@
   <ItemGroup>
     <Compile Include="app.js" />
     <Compile Include="routes\index.js" />
+    <Compile Include="routes\pdfCreator.js" />
     <Compile Include="routes\server-sql-query.js" />
   </ItemGroup>
   <ItemGroup>
