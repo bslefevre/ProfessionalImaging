@@ -15,7 +15,6 @@ namespace AttendeeClassLibrary
             //var barcodeImageBuilder = new BarcodeImageBuilder();
             Code128BarcodeDraw bla = BarcodeDrawFactory.Code128WithChecksum;
 
-            //var size = new Size(210, 90);
             var printMetrics = bla.GetPrintMetrics(size, size, 10);
             var image = bla.Draw(barcodeNumber, printMetrics);
 
