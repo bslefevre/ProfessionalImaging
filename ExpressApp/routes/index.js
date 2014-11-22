@@ -37,42 +37,42 @@ var users = getAttendee(null, function (error, result) {
     }
 });
 
-var phantom = require('phantom');
-var createDan = function createPdf() {
-    phantom.create(function (ph) {
-        ph.createPage(function (page) {
-            page.open(fs.createWriteStream("C:\tmp\test\o_9af8ee24cb817759.html"), function (status) {
-                console.log("opened google? ", status);
+//var phantom = require('phantom');
+//var createDan = function createPdf() {
+//    phantom.create(function (ph) {
+//        ph.createPage(function (page) {
+//            page.open(fs.createWriteStream("C:\tmp\test\o_9af8ee24cb817759.html"), function (status) {
+//                console.log("opened google? ", status);
                 
-                page.set('paperSize', {
-                    format: 'A4'
-                }, function () {
-                    // continue with page setup
-                });
+//                page.set('paperSize', {
+//                    format: 'A4'
+//                }, function () {
+//                    // continue with page setup
+//                });
 
-                page.render('/tmp/file2.pdf', function () {
-                    // file is now written to disk
-                    console.log('Page Rendered');
-                    ph.exit();
-                });                
+//                page.render('/tmp/file2.pdf', function () {
+//                    // file is now written to disk
+//                    console.log('Page Rendered');
+//                    ph.exit();
+//                });                
                 
-                //page.evaluate(function () { return document.title; }, function (result) {
-                //    console.log('Page title is ' + result);
+//                //page.evaluate(function () { return document.title; }, function (result) {
+//                //    console.log('Page title is ' + result);
 
 
-                //    ph.exit();
-                //});
+//                //    ph.exit();
+//                //});
 
-                //ph.exit();
+//                //ph.exit();
                 
-            });
-        });
-    }, {
-        dnodeOpts: {
-            weak: false
-        }
-    });
-}
+//            });
+//        });
+//    }, {
+//        dnodeOpts: {
+//            weak: false
+//        }
+//    });
+//}
 
 //var fs = require('fs');
 
@@ -126,44 +126,42 @@ var createDan = function createPdf() {
 //    return fs.createReadStream('mailtext.html');
 //};
 
-var nodemailer = require('nodemailer');
-var transporter = nodemailer.createTransport();
+//var nodemailer = require('nodemailer');
+//var transporter = nodemailer.createTransport();
 
-var sendMail = function () {
-    var text = ' Geachte [ENTERNAME]. <br />'+
-    '<br />' +
-'Hartelijk dank voor uw aanmelding.<br />' +
-'In bijlage treft u uw gratis toegangsbewijs aan.<br />' +
-'Print deze ticket zodanig uit dat de barcode leesbaar is en neem het mee bij uw bezoek aan de beurs.<br />' +
-'Komt u meerdere dagen dan deze ticket per dag laten scannen.<br />' +
-'<br />' +
-'Tot ziens op 28, 29 of 30 maart.<br />' +
-'<br />' +
-'Met vriendelijke groet, <br />' +
-'Organisatie Professional Imaging 2015.✔';
+//var sendMail = function () {
+//    var text = ' Geachte [ENTERNAME]. <br />'+
+//    '<br />' +
+//'Hartelijk dank voor uw aanmelding.<br />' +
+//'In bijlage treft u uw gratis toegangsbewijs aan.<br />' +
+//'Print deze ticket zodanig uit dat de barcode leesbaar is en neem het mee bij uw bezoek aan de beurs.<br />' +
+//'Komt u meerdere dagen dan deze ticket per dag laten scannen.<br />' +
+//'<br />' +
+//'Tot ziens op 28, 29 of 30 maart.<br />' +
+//'<br />' +
+//'Met vriendelijke groet, <br />' +
+//'Organisatie Professional Imaging 2015.✔';
     
-    var mailOptions = {
-        from: 'Ticket ✔ <ticket@professionalimaging.nl>', // sender address
-        to: 'Balletje balletje <doggiehostmaster@gmail.com>', // list of receivers
-        subject: 'TOEGANGSBEWIJS PROFESSIONAL IMAGING 2015 ✔', // Subject line
-        text: text, // plaintext body
-        html: text, // html body
-        attachments: {
-            filename: 'Toegangsticket PI 2015.pdf',
-            content: fs.createReadStream('toegangsticket PI 2015.pdf')
-        }
-    };
+//    var mailOptions = {
+//        from: 'Ticket ✔ <ticket@professionalimaging.nl>', // sender address
+//        to: 'Balletje balletje <doggiehostmaster@gmail.com>', // list of receivers
+//        subject: 'TOEGANGSBEWIJS PROFESSIONAL IMAGING 2015 ✔', // Subject line
+//        text: text, // plaintext body
+//        html: text, // html body
+//        attachments: {
+//            filename: 'Toegangsticket PI 2015.pdf',
+//            content: fs.createReadStream('toegangsticket PI 2015.pdf')
+//        }
+//    };
     
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            console.log('Error: ' + error);
-        } else {
-            console.log('Message sent to: ' + JSON.stringify(info.envelope.to));
-        }
-    });
-};
-
-webkitThingy();
+//    transporter.sendMail(mailOptions, function (error, info) {
+//        if (error) {
+//            console.log('Error: ' + error);
+//        } else {
+//            console.log('Message sent to: ' + JSON.stringify(info.envelope.to));
+//        }
+//    });
+//};
 
 exports.index = function (req, res) {
     res.render('index', { title: 'Express', year: new Date().getFullYear() });

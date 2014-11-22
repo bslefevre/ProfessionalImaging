@@ -38,9 +38,6 @@ if ('development' == app.get('env')) {
 var queryPath = path.join(__dirname, 'routes', 'server-sql-query.js');
 eval(fs.readFileSync(queryPath) + '');
 
-var pdfCreator = path.join(__dirname, 'routes', 'pdfCreator.js');
-eval(fs.readFileSync(pdfCreator) + '');
-
 app.get('/', routes.index);
 app.get('/about', routes.about);
 app.get('/contact', routes.contact);
@@ -130,11 +127,13 @@ var insertAttendee = edge.func('sql', function () {/*
 
 //}, null, true);
 
+var number = 0;
+
 app.post('/rest/generatePdf', cors(), function (req, res) {
     var newData = {
-        attendeeId : req.body.attendeeId
+        attendeeId : number //req.body.attendeeId
     };
-    
+    number++;
     generatePdf(newData, function (error, result) {
         if (error) throw error;
         console.log(result);
@@ -151,10 +150,56 @@ app.post('/rest/sendEmailToAttendee', cors(), function (req, res) {
     };
     sendEmailToAttendee(attendee, function (error, result) {
         if (error) throw error;
-        console.log(result);
-        res.json(result);
+        console.info('Daar gaan we');
+        sendMail(result, attendee, res);
     });
 });
+
+var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport();
+
+var sendMail = function (streamValue, attendee, res) {
+    var name = attendee.Initials + ' ' + attendee.Surname;
+    
+    var text = ' Geachte ' + name + '. <br />' +
+        '<br />' +
+    'Hartelijk dank voor uw aanmelding.<br />' +
+    'In bijlage treft u uw gratis toegangsbewijs aan.<br />' +
+    'Print deze ticket zodanig uit dat de barcode leesbaar is en neem het mee bij uw bezoek aan de beurs.<br />' +
+    'Komt u meerdere dagen dan deze ticket per dag laten scannen.<br />' +
+    '<br />' +
+    'Tot ziens op 28, 29 of 30 maart.<br />' +
+    '<br />' +
+    'Met vriendelijke groet, <br />' +
+    'Organisatie Professional Imaging 2015.✔';
+    
+    var mailOptions = {
+        from: 'Ticket ✔ <ticket@professionalimaging.nl>', // sender address
+        to: name +' <' + attendee.Emailaddress + '>', // list of receivers
+        subject: 'TOEGANGSBEWIJS PROFESSIONAL IMAGING 2015 ✔', // Subject line
+        text: text, // plaintext body
+        html: text, // html body
+        attachments: {
+            filename: 'Toegangsticket PI 2015.pdf',
+            content: streamValue
+        }
+    };
+    
+    var message = '';
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log('Error: ' + error);
+        } else {
+            
+            message = 'Message sent to: ' + JSON.stringify(info.envelope.to);
+            console.info(message);
+            res.json(message);
+        }
+    });
+
+    return message;
+};
+
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));

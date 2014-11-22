@@ -9,9 +9,18 @@
 
     <form action="" id="createNumber">
 
-        <input type="text" name="attendeeId" placeholder="Voer bezoeker id in..." /><br />
+	
+        <input type="text" name="id" value="9" placeholder="Voer nummer in..." /><br />
+        <input type="text" name="bedrijfsnaam" value="bedrijfsnaam" placeholder="Voer bedrijfsnaam in..." /><br />
+        <input type="text" name="initials" value="voorletters" placeholder="Voer voorletters in..."><br />
+        <input type="text" name="surname" value="achternaam" placeholder="Voer achternaam in..."><br />
+        <input type="text" name="emailaddress" value="doggiehostmaster@gmail.com" placeholder="Voer emailadres in..."><br />
+        <input type="text" name="zaterdag" value="0" placeholder="Voer zaterdag in..."><br />
+        <input type="text" name="zondag" value="1" placeholder="Voer zondag in..."><br />
+        <input type="text" name="maandag" value="2" placeholder="Voer maandag in..."><br />
+        <input type="text" name="passepartout" value="3" placeholder="Voer passepartout in..."><br />
 
-        <input type="submit" value="Maak een PDF aan">
+        <input type="submit" value="Maak een bezoeker aan">
     </form>
     <!-- the result of the search will be rendered inside this div -->
     <div id="result"></div>
@@ -37,7 +46,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:1337/rest/generatePdf', //'http://pandora.synology.me:2015/rest/generatePdf',
+                url: 'http://pandora.synology.me:2015/rest/sendEmailToAttendee',
                 xhrFields: {
                     withCredentials: false
                 },

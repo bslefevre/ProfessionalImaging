@@ -2,7 +2,5 @@ C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\AttendeeClassLibrary\bin\De
 C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\AttendeeClassLibrary\bin\Debug\AttendeeClassLibrary.pdb
 C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\AttendeeClassLibrary\obj\Debug\AttendeeClassLibrary.dll
 C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\AttendeeClassLibrary\obj\Debug\AttendeeClassLibrary.pdb
-C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\AttendeeClassLibrary\obj\Debug\AttendeeClassLibrary.csprojResolveAssemblyReference.cache
 C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\AttendeeClassLibrary\bin\Debug\PdfSharp-WPF.dll
-C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\AttendeeClassLibrary\bin\Debug\Zen.Barcode.Core.dll
-C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\AttendeeClassLibrary\bin\Debug\Zen.Barcode.SSRS.dll
+C:\Users\Doggie\Documents\GitHub\ProfessionalImaging\AttendeeClassLibrary\obj\Debug\AttendeeClassLibrary.csprojResolveAssemblyReference.cache

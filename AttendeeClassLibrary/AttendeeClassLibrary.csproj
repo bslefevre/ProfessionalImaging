@@ -46,10 +46,10 @@
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="Zen.Barcode.Core">
-      <HintPath>..\..\DoggieCreationsFramework\DoggieCreationsUnitTest\Utilities\Zen.Barcode.Core.dll</HintPath>
+      <HintPath>..\ExpressApp\Zen.Barcode.Core.dll</HintPath>
     </Reference>
     <Reference Include="Zen.Barcode.SSRS">
-      <HintPath>..\..\DoggieCreationsFramework\DoggieCreationsUnitTest\Utilities\Zen.Barcode.SSRS.dll</HintPath>
+      <HintPath>..\ExpressApp\Zen.Barcode.SSRS.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
