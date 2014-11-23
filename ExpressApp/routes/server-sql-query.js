@@ -12,35 +12,35 @@
 
 // SETX EDGE_SQL_CONNECTION_STRING "Data Source=localhost;Initial Catalog=ProfessionalImaging;Integrated Security=True";
 
-var getAttendee = edge.func('sql', function () {/*
-    SELECT * FROM Attendee
-*/
-});
+//var getAttendee = edge.func('sql', function () {/*
+//    SELECT * FROM Attendee
+//*/
+//});
 
-var getPerson = edge.func(function () {/*
-    using System.Threading.Tasks;
+//var getPerson = edge.func(function () {/*
+//    using System.Threading.Tasks;
 
-    public class Person
-    {
-        public int anInteger = 1;
-        public double aNumber = 3.1415;
-        public string aString = "foo";
-        public bool aBoolean = true;
-        public byte[] aBuffer = new byte[10];
-        public object[] anArray = new object[] { 1, "foo" };
-        public object anObject = new { a = "foo", b = 12 };
-    }
+//    public class Person
+//    {
+//        public int anInteger = 1;
+//        public double aNumber = 3.1415;
+//        public string aString = "foo";
+//        public bool aBoolean = true;
+//        public byte[] aBuffer = new byte[10];
+//        public object[] anArray = new object[] { 1, "foo" };
+//        public object anObject = new { a = "foo", b = 12 };
+//    }
 
-    public class Startup
-    {
-        public async Task<object> Invoke(dynamic input)
-        {
-            Person person = new Person();
-            return person;
-        }
-    }
-*/
-});
+//    public class Startup
+//    {
+//        public async Task<object> Invoke(dynamic input)
+//        {
+//            Person person = new Person();
+//            return person;
+//        }
+//    }
+//*/
+//});
 
 var attendeeClassLibrary = path.join(__dirname, 'bin', 'AttendeeClassLibrary.dll');
 
@@ -68,32 +68,32 @@ function logError(err, res) {
     res.end("");
 }
 
-function initial(req, res) {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
+//function initial(req, res) {
+//    res.writeHead(200, { 'Content-Type': 'text/html' });
     
-    getAttendee(null, function (error, result) {
-        if (error) { logError(error, res); return; }
-        if (result) {
-            res.write("<ul>");
-            result.forEach(function (attendee) {
-                var value = "<li>" + attendee.Initials + " " + attendee.Surname + ": " + attendee.Emailaddress + "</li>";
-                console.log(value);
-                res.write(value);
-            });
-            res.end("</ul>");
-        }
-        else {
-        }
-    });
+//    getAttendee(null, function (error, result) {
+//        if (error) { logError(error, res); return; }
+//        if (result) {
+//            res.write("<ul>");
+//            result.forEach(function (attendee) {
+//                var value = "<li>" + attendee.Initials + " " + attendee.Surname + ": " + attendee.Emailaddress + "</li>";
+//                console.log(value);
+//                res.write(value);
+//            });
+//            res.end("</ul>");
+//        }
+//        else {
+//        }
+//    });
     
-    //var data = { pageNumber: '2', pageSize: 3 };
+//    //var data = { pageNumber: '2', pageSize: 3 };
     
-    //clrMethod(data, function (error, result) {
-    //    if (error) throw error;
-    //    console.log(result);
-    //});
+//    //clrMethod(data, function (error, result) {
+//    //    if (error) throw error;
+//    //    console.log(result);
+//    //});
 
-}
+//}
 
 //app.get('/', initial);
 

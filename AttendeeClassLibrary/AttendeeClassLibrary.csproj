@@ -48,9 +48,6 @@
     <Reference Include="Zen.Barcode.Core">
       <HintPath>..\ExpressApp\Zen.Barcode.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Zen.Barcode.SSRS">
-      <HintPath>..\ExpressApp\Zen.Barcode.SSRS.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreateBarcode.cs" />
