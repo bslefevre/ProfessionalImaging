@@ -55,10 +55,17 @@ function Attendee(contract, voornaam, achternaam, bedrijfsnaam, emailadres, zate
     this.professie = professie;
 }
 
+app.get('/rest/getAttendeeCount', cors(), function (req, res) {
+
+    getAttendeeCount(null, function (error, result) {
+        if (error) throw error;
+        if (result.length == 1) {
+            res.json(result[0]);
+        }
+    });
+});
+
 app.post('/rest/insertAttendee', cors(), function (req, res) {
-    //res.charset = 'utf-8';
-    //console.log(JSON.stringify(req.body));
-    
     var attendee = new Attendee('ProfessionalImaging',
         req.body.voornaam,
         req.body.achternaam,
@@ -160,12 +167,16 @@ var sendMailToUnprocessedAttendee = function () {
             result.forEach(function (attendee) {
                 sendEmailToAttendee(attendee, function (error, result) {
                     if (error) throw error;
-                    //console.info('Daar gaan we');
                     var mailOptions = createMailToSend(result, attendee);
                     transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
-                            console.log('Error: ' + error);
-                            return false;
+                            attendee.Error = error.message;
+                            updateAttendeeAfterUnsuccessfullMailSend(attendee, function (updateError, result) {
+                                if (updateError) throw updateError;
+                                if (result) {
+                                    console.log('Error: ' + error);
+                                }
+                            });
                         } else {
                             var message = 'Message sent to: ' + JSON.stringify(info.envelope.to);
                             console.info(message);
@@ -176,11 +187,18 @@ var sendMailToUnprocessedAttendee = function () {
                                     console.log('Hoeveelheid goed verwerkt:: ' + hoeveelheidGoed);
                                     if (hoeveelMails == hoeveelheidGoed) {
                                         console.log('===========================================================================');
-                                        console.log('============================= Alles verwerkt ==============================');
+                                        console.log('=========================== Alles goed verwerkt ===========================');
                                         console.log('===========================================================================');
                                     }
                                 }
                             });
+                        }
+
+                        hoeveelMails--;
+                        if (hoeveelMails == 0) {
+                            console.log('===========================================================================');
+                            console.log('================================== DONE ===================================');
+                            console.log('===========================================================================');
                         }
                     });
                 });
@@ -219,6 +237,14 @@ var createMailToSend = function (streamValue, attendee) {
     return mailOptions;
 };
 
+var updateAttendeeAfterUnsuccessfullMailSend = edge.func('sql', function () {/*
+UPDATE Attendee
+Set Errorlog = @Error,
+Processed = -1
+WHERE Id = @Id;
+*/
+});
+
 var updateAttendeeAfterSuccesfullMailSend = edge.func('sql', function () { /*
 UPDATE Attendee
 SET Processed = 1
@@ -229,6 +255,14 @@ WHERE Id = @Id;
 var getUnprocessedAttendee = edge.func('sql', function () { /*
 SELECT * FROM Attendee
 WHERE Processed = 0;
+*/
+});
+
+var getAttendeeCount = edge.func('sql', function () {/*
+SELECT Zaterdag, Zondag, Maandag
+FROM (SELECT COUNT(Zaterdag) as Zaterdag FROM Attendee WHERE Zaterdag = 1) Zaterdag
+CROSS JOIN (SELECT COUNT(Zondag) as Zondag FROM Attendee WHERE Zondag = 1) Zondag
+CROSS JOIN (SELECT COUNT(Maandag) as Maandag FROM Attendee WHERE Maandag = 1) Maandag
 */
 });
 
@@ -275,12 +309,12 @@ var sendMail = function (streamValue, attendee) {
     'Tot ziens op 28, 29 of 30 maart.<br />' +
     '<br />' +
     'Met vriendelijke groet, <br />' +
-    'Organisatie Professional Imaging 2015.✔';
+    'Organisatie Professional Imaging 2015.';
     
     var mailOptions = {
         from: 'Ticket ✔ <ticket@professionalimaging.nl>', // sender address
         to: name +' <' + attendee.Emailaddress + '>', // list of receivers
-        subject: 'TOEGANGSBEWIJS PROFESSIONAL IMAGING 2015 ✔', // Subject line
+        subject: 'TOEGANGSBEWIJS PROFESSIONAL IMAGING 2015', // Subject line
         text: text, // plaintext body
         html: text, // html body
         attachments: {

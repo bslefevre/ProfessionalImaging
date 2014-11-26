@@ -1,0 +1,52 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Test Bezoeker Aantal</title>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
+
+    <!-- the result of the search will be rendered inside this div -->
+    <section id="zaterdag">Zaterdag</section>
+    <section id="zondag">Zondag</section>
+    <section id="maandag">Maandag</section>
+
+    <script>
+        $(function () {
+            $.ajax({
+                type: 'GET',
+                url: 'http://pandora.synology.me:2015/rest/getAttendeeCount',
+                xhrFields: {
+                    withCredentials: false
+                },
+                data: null,
+                dataType: 'json',
+                success: function (data) {
+                    setBackgroundColors(data);
+                },
+                error: function (data) {
+                    alert("ERROR:: " + JSON.stringify(data));
+                }
+            });
+
+            //alert('Hoi!');
+        });
+
+        function setBackgroundColors(amountOfAttendee) {
+            $('#zaterdag').text('Zaterdag (' + amountOfAttendee.Zaterdag + ')');
+            $('#zaterdag').css({ backgroundColor: getColorWithAmount(amountOfAttendee.Zaterdag) });
+            $('#zondag').text('Zondag (' + amountOfAttendee.Zondag + ')');
+            $('#zondag').css({ backgroundColor: getColorWithAmount(amountOfAttendee.Zondag) });
+            $('#maandag').text('Maandag (' + amountOfAttendee.Maandag + ')');
+            $('#maandag').css({ backgroundColor: getColorWithAmount(amountOfAttendee.Maandag) });
+        };
+
+        function getColorWithAmount(amount) {
+            if (amount > 0) return 'orange';
+            if (amount > 1000) return 'red';
+            return 'green';
+        }
+    </script>
+</body>
+</html>

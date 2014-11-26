@@ -93,7 +93,7 @@ exports.attendee = function (req, res) {
 var counter = 0;
 
 var testInsert = function () {
-    if (counter <= 497)
+    if (counter <= 1)
     {
         testInsertValues(null, function (error, result) {
             if (error) throw error;
@@ -124,10 +124,10 @@ INSERT INTO [dbo].[Attendee]
            ,'Test'
            ,'Test'
            ,'Test'
-           ,'Test'
+           ,'l@l.nl'
            ,0
            ,0
            ,0
            ,'Test'
-           ,1)
+           ,0)
 */});
