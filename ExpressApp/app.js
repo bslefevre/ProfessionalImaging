@@ -65,6 +65,36 @@ app.get('/rest/getAttendeeCount', cors(), function (req, res) {
     });
 });
 
+app.post('/rest/resendRegistration', cors(), function (req, res) {
+    var emailadres = req.body.emailaddress;
+    
+    
+    checkOpBestaandEmailAdres({ 'emailadres': emailadres }, function (error, result) {
+        var bestaatEmailAdres = false;
+        
+        if (error) { throw error; }
+        if (result) {
+            if (result.length > 0) bestaatEmailAdres = true;
+        }
+        
+        if (!bestaatEmailAdres) {
+            res.statusCode = 400;
+            res.json('E-mail bestaat niet in de database.');
+            return;
+        }
+        updateAttendeeByEmailForResend({ 'emailadres': emailadres }, function (error, result) {
+            if (error) { throw error; }
+            if (result) {
+                
+                console.log('Mail will be resend to: ' + emailadres);
+                res.statusCode = 200;
+                res.json('E-mail wordt opnieuw verstuurd');
+            }
+        });
+    });
+
+});
+
 app.post('/rest/insertAttendee', cors(), function (req, res) {
     var attendee = new Attendee('ProfessionalImaging',
         req.body.voornaam,
@@ -236,6 +266,13 @@ var createMailToSend = function (streamValue, attendee) {
     
     return mailOptions;
 };
+
+var updateAttendeeByEmailForResend = edge.func('sql', function () { /*
+UPDATE Attendee
+Set Processed = 0
+WHERE Emailaddress = @emailadres
+*/
+});
 
 var updateAttendeeAfterUnsuccessfullMailSend = edge.func('sql', function () {/*
 UPDATE Attendee

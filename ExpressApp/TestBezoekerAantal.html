@@ -6,13 +6,30 @@
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <body>
+    <span id="zaterdag"><span id="zaterdagColor"></span><span id="zaterdagText"></span></span>
+    <span id="zondag"><span id="zondagColor"></span><span id="zondagText"></span></span>
+    <span id="maandag"><span id="maandagColor"></span><span id="maandagText"></span></span>
+    
+    <style>
+        #zaterdag, #zondag, #maandag { 
+            float: right; 
+        }
+        #zaterdagColor, #zondagColor, #maandagColor {
+            margin-top: 3px;
+            background-color: green;
+            height: 14px;
+            width: 14px;
+            -webkit-border-radius: 7px;
+            -moz-border-radius: 7px;
+            position: absolute;
+        }
+        #zaterdagText, #zondagText, #maandagText {
+            padding-top: 5px;
+            margin-left: 20px;
+        }
+    </style>
 
-    <!-- the result of the search will be rendered inside this div -->
-    <section id="zaterdag">Zaterdag</section>
-    <section id="zondag">Zondag</section>
-    <section id="maandag">Maandag</section>
-
-    <script>
+    <script type="text/javascript">
         $(function () {
             $.ajax({
                 type: 'GET',
@@ -24,28 +41,29 @@
                 dataType: 'json',
                 success: function (data) {
                     setBackgroundColors(data);
-                },
-                error: function (data) {
-                    alert("ERROR:: " + JSON.stringify(data));
                 }
             });
-
-            //alert('Hoi!');
         });
 
         function setBackgroundColors(amountOfAttendee) {
-            $('#zaterdag').text('Zaterdag (' + amountOfAttendee.Zaterdag + ')');
-            $('#zaterdag').css({ backgroundColor: getColorWithAmount(amountOfAttendee.Zaterdag) });
-            $('#zondag').text('Zondag (' + amountOfAttendee.Zondag + ')');
-            $('#zondag').css({ backgroundColor: getColorWithAmount(amountOfAttendee.Zondag) });
-            $('#maandag').text('Maandag (' + amountOfAttendee.Maandag + ')');
-            $('#maandag').css({ backgroundColor: getColorWithAmount(amountOfAttendee.Maandag) });
+            $('#zaterdagText').text(getTextWithAmount(amountOfAttendee.Zaterdag));
+            $('#zaterdagColor').css({ backgroundColor: getColorWithAmount(amountOfAttendee.Zaterdag) });
+            $('#zondagText').text(getTextWithAmount(amountOfAttendee.Zondag));
+            $('#zondagColor').css({ backgroundColor: getColorWithAmount(amountOfAttendee.Zondag) });
+            $('#maandagText').text(getTextWithAmount(amountOfAttendee.Maandag));
+            $('#maandagColor').css({ backgroundColor: getColorWithAmount(amountOfAttendee.Maandag) });
         };
 
         function getColorWithAmount(amount) {
+            if (amount > 1) return 'red';
             if (amount > 0) return 'orange';
-            if (amount > 1000) return 'red';
             return 'green';
+        }
+
+        function getTextWithAmount(amount) {
+            if (amount > 1) return 'Wij raden u aan om een andere dag te gaan vanwege de verwachte drukte.';
+            if (amount > 0) return 'Kans op een drukte';
+            return '';
         }
     </script>
 </body>
