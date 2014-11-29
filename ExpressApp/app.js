@@ -78,7 +78,7 @@ app.post('/rest/resendRegistration', cors(), function (req, res) {
         }
         
         if (!bestaatEmailAdres) {
-            res.statusCode = 400;
+            res.statusCode = 418;
             res.json('E-mail bestaat niet in de database.');
             return;
         }
@@ -108,6 +108,12 @@ app.post('/rest/insertAttendee', cors(), function (req, res) {
 
     console.log(JSON.stringify(attendee));
     
+    if (req.body.inTest === "true") {
+        res.json(true);
+        console.log('Applicatie is in test');
+        return;
+    }
+
     checkOpBestaandEmailAdres(attendee, function (error, result) {
         var bestaatEmailAdres = false;
         
@@ -117,7 +123,7 @@ app.post('/rest/insertAttendee', cors(), function (req, res) {
         }
 
         if (bestaatEmailAdres) {
-            res.statusCode = 400;
+            res.statusCode = 418;
             res.send('E-mail bestaat al in de database.');
             return;
         }
