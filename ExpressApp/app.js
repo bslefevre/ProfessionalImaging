@@ -10,6 +10,7 @@ var path = require('path');
 var fs = require('fs');
 var edge = require('edge');
 var cors = require('cors');
+var moment = require('moment');
 
 var app = express();
 // all environments
@@ -43,7 +44,7 @@ app.get('/about', routes.about);
 app.get('/contact', routes.contact);
 app.get('/bezoekers', routes.attendee);
 
-function Attendee(contract, voornaam, achternaam, bedrijfsnaam, emailadres, zaterdag, zondag, maandag, professie){
+function Attendee(contract, voornaam, achternaam, bedrijfsnaam, emailadres, zaterdag, zondag, maandag, professie, nieuwsbrief, createdDateTime){
     this.contract = contract;
     this.voornaam = voornaam;
     this.achternaam = achternaam;
@@ -53,7 +54,49 @@ function Attendee(contract, voornaam, achternaam, bedrijfsnaam, emailadres, zate
     this.zondag = zondag;
     this.maandag = maandag;
     this.professie = professie;
+    this.nieuwsbrief = nieuwsbrief;
+    this.createdDateTime = createdDateTime;
 }
+
+app.get('/info/bezoekersPerDag', cors(), function (req, res) {
+    fs.readFile('./AmountPerDay.html', function (error, content) {
+        if (error) {
+            res.writeHead(500);
+            res.end();
+        }
+        else {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(content, 'utf-8');
+        }
+    });
+});
+
+app.get('/info/bar', cors(), function (req, res) {
+    fs.readFile('./TestBar.html', function (error, content) {
+        if (error) {
+            res.writeHead(500);
+            res.end();
+        }
+        else {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(content, 'utf-8');
+        }
+    });
+});
+
+app.get('/info/pie', cors(), function (req, res) {
+    fs.readFile('./TestPie.html', function (error, content) {
+        if (error) {
+            res.writeHead(500);
+            res.end();
+        }
+        else {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(content, 'utf-8');
+        }
+    });
+});
+
 
 app.get('/rest/getAttendeeCount', cors(), function (req, res) {
 
@@ -104,7 +147,9 @@ app.post('/rest/insertAttendee', cors(), function (req, res) {
         req.body.zaterdag,
         req.body.zondag,
         req.body.maandag,
-        req.body.professie);
+        req.body.professie,
+		req.body.nieuwsbrief,
+        moment().format('YYYY-MM-DD HH:mm:ss'));
 
     console.log(JSON.stringify(attendee));
     
@@ -158,7 +203,9 @@ var insertAttendee = edge.func('sql', function () {/*
            ,[Zaterdag]
            ,[Zondag]
            ,[Maandag]
-           ,[Profession])
+           ,[Profession]
+		   ,[Nieuwsbrief]
+           ,[CreatedDateTime])
      VALUES
            (@contract
 		   , @bedrijfsnaam
@@ -168,7 +215,9 @@ var insertAttendee = edge.func('sql', function () {/*
 		   , @zaterdag
 		   , @zondag
 		   , @maandag
-		   , @professie)
+		   , @professie
+		   , @nieuwsbrief
+           , @createdDateTime)
 */
 });
 

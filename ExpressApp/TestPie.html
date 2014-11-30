@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flot Pie Chart</title>
+
+    <style type="text/css">
+        body, div {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: Verdana, Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        #placeholder {
+            height: 100%;
+            width: 100%;
+        }
+
+        .flex-init-setup {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+        }
+
+        .flex-ppal-setup {
+            -webkit-flex-flow: column wrap;
+            -moz-flex-flow: column wrap;
+            flex-flow: column wrap;
+            -webkit-justify-content: center;
+            -moz-justify-content: center;
+            justify-content: center;
+        }
+
+        /*#placeholder {
+            width: 400px;
+            height: 400px;
+        }*/
+
+        /*.legend table, .legend > div {
+            height: 82px !important;
+            opacity: 1 !important;
+            left: 170px;
+            top: 10px;
+            width: 116px !important;
+        }*/
+
+        /*.legend table {
+            border: 1px solid #555;
+            padding: 5px;
+        }*/
+    </style>
+
+    <!--[if lte IE 8]><script type="text/javascript" language="javascript" src="excanvas.min.js"></script><![endif]-->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.pie.min.js"></script>
+
+    <script type="text/javascript">
+        var data = [
+            { label: "IE", data: 19.5, color: "#4572A7" },
+            { label: "Safari", data: 4.5, color: "#80699B" },
+            { label: "Firefox", data: 36.6, color: "#AA4643" },
+            { label: "Opera", data: 2.3, color: "#3D96AE" },
+            { label: "Chrome", data: 36.3, color: "#89A54E" },
+            { label: "Other", data: 0.8, color: "#3D96AE" }
+        ];
+
+        $(document).ready(function () {
+            $.plot('#placeholder', data, {
+                series: {
+                    pie: {
+                        show: true,
+                        radius: 1,
+                        label: {
+                            show: true,
+                            radius: 3 / 4,
+                            formatter: function (label, series) {
+                                return '<div style="font-size:11px; text-align:center; padding:2px; color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
+                            },
+                            background: {
+                                opacity: 0.8,
+                                color: '#444'
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    show: false
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div id="placeholder"></div>
+</body>
+</html>

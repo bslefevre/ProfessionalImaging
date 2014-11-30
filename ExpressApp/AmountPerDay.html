@@ -1,0 +1,140 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flot Bar Chart</title>
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.time.min.js"></script>
+    <script src="http://jumjum123.github.io/JUMFlot/javascripts/JUMFlot.min.js"></script>
+    <style type="text/css">
+        body, div {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        #placeholder {
+            height: 100%;
+            width: 100%;
+        }
+
+        .flex-init-setup {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+        }
+
+        .flex-ppal-setup {
+            -webkit-flex-flow: column wrap;
+            -moz-flex-flow: column wrap;
+            flex-flow: column wrap;
+            -webkit-justify-content: center;
+            -moz-justify-content: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="placeholder"></div>
+
+    <script type="text/javascript">
+        function dayToNumber(dayName) {
+            var result;
+            switch (dayName) {
+                case 'Zaterdag': result = 0; break;
+                case 'Zondag': result = 1; break;
+                case 'Maandag': result = 2; break;
+            }
+            return result;
+        }
+
+        $(function () {
+            $.ajax({
+                type: 'GET',
+                url: 'http://pandora.synology.me:2015/rest/getAttendeeCount',
+                xhrFields: {
+                    withCredentials: false
+                },
+                data: null,
+                dataType: 'json',
+                success: function (data) {
+                    var values = [[0, data.Zaterdag], [1, data.Zondag], [2, data.Maandag]];
+
+                    plotData(values);
+                }
+            });
+        });
+
+        function plotData(amountPerDayData) {
+            var df2 = [[0, 200], [1, 100], [2, 300]];
+            var data = [
+                {
+                    label: "Geregistreerde bezoekers per dag", data: amountPerDayData, bars: {
+                        show: true, align: "center",
+                        fill: true,
+                        barWidth: 1
+                    },
+                    lines: { show: false }, points: { show: false },
+                    grow: { stepMode: "linear", stepDirection: "up", steps: 80 }
+                }
+            ];
+            var options = {
+                grid: {
+                    hoverable: true,
+                    axisMargin: 20
+                },
+                series: {
+                    grow: { active: true },
+                    bars: { show: true }
+                },
+                bars: { show: true, align: 'center', barWidth: 0.7 },
+                xaxis: {
+                    tickFormatter: function (val, axis) {
+                        var result = '';
+                        switch (val) {
+                            case 0: result = 'Zaterdag'; break;
+                            case 1: result = 'Zondag'; break;
+                            case 2: result = 'Maandag'; break;
+                        }
+                        return result;
+                    },
+                    align: 'center',
+                    //mode: "time",
+                    //timezone: "browser",
+                    //timeformat: '%hu',
+                    //tickSize: [1, "hour"],
+                    //tickLength: 0,
+                    minTickSize: 1,
+                    //min: (new Date(2014, 11, 30, 8)).getTime(),
+                    //max: (new Date(2014, 11, 30, 18)).getTime(),
+                    color: "black",
+                    //axisLabel: "Date",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Verdana, Arial',
+                    //axisLabelPadding: 10
+                },
+                yaxis: {
+                    color: "black",
+                    tickDecimals: 0,
+                    axisLabel: "Bezoekers per dag",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Verdana, Arial',
+                    axisLabelPadding: 10
+                },
+                clickable: true, hoverable: true,
+            };
+            var p = $.plot($("#placeholder"), data, options);
+        }
+    </script>
+</body>
+</html>
