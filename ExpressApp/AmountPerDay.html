@@ -73,6 +73,37 @@
             });
         });
 
+        $("<div id='tooltip'></div>").css({
+            position: "absolute",
+            display: "none",
+            border: "2px solid #000",
+            padding: "2px",
+            "background-color": "#fee",
+            opacity: 0.80,
+            'font-weight': 'bold',
+            'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif'
+        }).appendTo("body");
+
+        $("#placeholder").bind("plothover", function (event, pos, item) {
+            if (item) {
+                var x = item.datapoint[0],
+                    y = item.datapoint[1];
+
+                var result = '';
+                switch (x) {
+                    case 0: result = 'zaterdag'; break;
+                    case 1: result = 'zondag'; break;
+                    case 2: result = 'maandag'; break;
+                }
+
+                $("#tooltip").html("Aantal bezoekers op " + result + ": " + y)
+					.css({ top: pageXOffset + 5 , left: pageYOffset + 5 })
+					.fadeIn(200);
+            } else {
+                $("#tooltip").hide();
+            }
+        });
+
         function plotData(amountPerDayData) {
             var df2 = [[0, 200], [1, 100], [2, 300]];
             var data = [
