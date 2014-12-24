@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bezoekers per professie</title>
+
+    <style type="text/css">
+        body, div {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: Verdana, Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        #placeholder {
+            height: 100%;
+            width: 100%;
+        }
+
+        .flex-init-setup {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+        }
+
+        .flex-ppal-setup {
+            -webkit-flex-flow: column wrap;
+            -moz-flex-flow: column wrap;
+            flex-flow: column wrap;
+            -webkit-justify-content: center;
+            -moz-justify-content: center;
+            justify-content: center;
+        }
+    </style>
+
+    <!--[if lte IE 8]><script type="text/javascript" language="javascript" src="excanvas.min.js"></script><![endif]-->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.pie.min.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $.ajax({
+                type: 'GET',
+                url: 'http://pandora.synology.me:2015/rest/getAttendeePerProfessionCount',
+                xhrFields: {
+                    withCredentials: false
+                },
+                data: null,
+                dataType: 'json',
+                success: function (data) {
+                    plotData(data);
+                }
+            });
+        });
+
+        function plotData(amountPerProfessionData) {
+
+            var data = [
+            { label: "Professional - full time", data: amountPerProfessionData.ft, color: "#4572A7" },
+            { label: "Semi professional - parttime", data: amountPerProfessionData.pt, color: "#80699B" },
+            { label: "Student", data: amountPerProfessionData.st, color: "#AA4643" },
+            { label: "Amateur", data: amountPerProfessionData.am, color: "#3D96AE" }
+            ];
+
+            $.plot('#placeholder', data, {
+                series: {
+                    pie: {
+                        grow: { active: true },
+                        show: true,
+                        radius: screen.width,
+                        stroke: {
+                            width: 5
+                        },
+                        label: {
+                            //threshold: 0.1,
+                            show: true,
+                            radius: 3 / 4,
+                            formatter: function (label, series) {
+                                return '<div style="font-size:11px; text-align:center; padding:2px; color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
+                            },
+                            background: {
+                                opacity: 0.8,
+                                color: '#444'
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    show: false
+                }
+            });
+        };
+    </script>
+</head>
+
+<body>
+    <div id="placeholder"></div>
+</body>
+</html>

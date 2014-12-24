@@ -20,7 +20,7 @@
     <OutputPath>.</OutputPath>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
     <NodejsPort>1337</NodejsPort>
     <StartWebBrowser>true</StartWebBrowser>
   </PropertyGroup>
@@ -44,6 +44,10 @@
   <ItemGroup>
     <None Include="NodeJS.pubxml" />
     <Content Include="AmountPerDay.html" />
+    <Content Include="AmountPerProfession.html" />
+    <Content Include="CountPerDay.html" />
+    <Content Include="CountPerHour.html" />
+    <Content Include="CountPerMonth.html" />
     <Content Include="public\javascripts\bootstrap.js" />
     <Content Include="public\javascripts\bootstrap.min.js" />
     <Content Include="public\javascripts\jquery-1.10.2.intellisense.js" />

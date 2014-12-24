@@ -5,17 +5,21 @@ block content
     h1 Bezoekers
   .row
     .col-xs-3
-      h4 Initialen
+      h4 Naam
     .col-xs-3
       h4 Verwerkt
+    .col-xs-3
+      h4 Aanmaakdatum
     .col-xs-3
       h4 Emailadres
   - var values = attendeeList;
     each val in values.length ? values : ['There are no values']
       .row
         .col-xs-3
-          p= (val.Id) + val.Initials + ' ' + val.Surname
+          p= (val.Id) + ' ' + val.Initials + ' ' + val.Surname
         .col-xs-3
-          input(type='checkbox', checked=val.Processed)
+          input(type='checkbox', checked=val.Errorlog == null) 
+        .col-xs-3
+          p=val.CreatedDateTime
         .col-xs-3
           p= val.Emailaddress

@@ -1,4 +1,4 @@
-﻿
+﻿var connectionString = 'Data Source=THUNDER;Initial Catalog=ProfessionalImaging;User Id=sa;Password =Welkom01;';
 /*
  * GET home page.
  */
@@ -18,9 +18,13 @@ var edge = require('edge');
 
 var attendeeList = [];
 
-var getAttendee = edge.func('sql', function () {/*
+var getAttendee = edge.func('sql', {
+    source: function () {/*
     SELECT * FROM Attendee
-*/
+    ORDER BY CreatedDateTime DESC
+    */
+    },
+    //connectionString: connectionString
 });
 
 var users = getAttendee(null, function (error, result) {

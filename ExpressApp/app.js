@@ -11,6 +11,8 @@ var fs = require('fs');
 var edge = require('edge');
 var cors = require('cors');
 var moment = require('moment');
+var connectionString = 'Data Source=THUNDER;Initial Catalog=ProfessionalImaging;User Id=sa;Password =Welkom01;';
+var validator = require('validator');
 
 var app = express();
 // all environments
@@ -18,10 +20,70 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
+
+express.logger.format('dev', function (tokens, req, res) {
+    var status = res.statusCode
+    , color = 32;
+    
+    if (status >= 500) color = 31
+    else if (status >= 400) color = 33
+    else if (status >= 300) color = 36;
+    
+    var remoteAddr = getRemoteAddr(req);
+    var dateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+    
+    var logText = '\x1b[90m' + req.method 
+    + ' ' + dateTime
+    + ' ' + remoteAddr
+    + ' ' + req.originalUrl + ' '
+    + '\x1b[' + color + 'm' + res.statusCode 
+    + ' \x1b[90m' 
+    + (new Date- req._startTime) 
+    + 'ms'
+    + '\x1b[0m';
+    
+    var userAgent = req.headers['user-agent'];
+
+    var allLoggingText = [];
+    allLoggingText.push(req.method);
+    allLoggingText.push(status.toString());
+    allLoggingText.push(dateTime);
+    allLoggingText.push(remoteAddr);
+    allLoggingText.push(req.originalUrl);
+    allLoggingText.push(userAgent);
+
+    fs.appendFile(__dirname + '/logging/' + moment().format('YYYY-MM-DD') + '_debug.csv', toLongString(allLoggingText) + '\n');
+
+    return logText;
+});
+
+var toLongString = function (stringArray) {
+    var item, i;
+    var line = [];
+    
+    for (i = 0; i < stringArray.length; ++i) {
+        item = stringArray[i];
+        item = item.replace(';', '');
+        if (item.indexOf && (item.indexOf(',') !== -1 || item.indexOf('"') !== -1)) {
+            item = '"' + item.replace(/"/g, '""') + '"';
+        }
+        line.push(item);
+    }
+
+    return line;
+}
+
+var getRemoteAddr = function (req) {
+    if (req.ip) return req.ip;
+    if (req._remoteAddress) return req._remoteAddress;
+    var sock = req.socket;
+    if (sock.socket) return sock.socket.remoteAddress;
+    return sock.remoteAddress;
+};
+
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
-//app.use(express.methodOverride());
 app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -71,6 +133,58 @@ app.get('/info/bezoekersPerDag', cors(), function (req, res) {
     });
 });
 
+app.get('/info/bezoekersPerProfessie', cors(), function (req, res) {
+    fs.readFile('./AmountPerProfession.html', function (error, content) {
+        if (error) {
+            res.writeHead(500);
+            res.end();
+        }
+        else {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(content, 'utf-8');
+        }
+    });
+});
+
+app.get('/info/aantalPerDag', cors(), function (req, res) {
+    fs.readFile('./CountPerDay.html', function (error, content) {
+        if (error) {
+            res.writeHead(500);
+            res.end();
+        }
+        else {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(content, 'utf-8');
+        }
+    });
+});
+
+app.get('/info/aantalPerMaand', cors(), function (req, res) {
+    fs.readFile('./CountPerMonth.html', function (error, content) {
+        if (error) {
+            res.writeHead(500);
+            res.end();
+        }
+        else {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(content, 'utf-8');
+        }
+    });
+});
+
+app.get('/info/aantalPerUur', cors(), function (req, res) {
+    fs.readFile('./CountPerHour.html', function (error, content) {
+        if (error) {
+            res.writeHead(500);
+            res.end();
+        }
+        else {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(content, 'utf-8');
+        }
+    });
+});
+
 app.get('/info/bar', cors(), function (req, res) {
     fs.readFile('./TestBar.html', function (error, content) {
         if (error) {
@@ -99,11 +213,58 @@ app.get('/info/pie', cors(), function (req, res) {
 
 
 app.get('/rest/getAttendeeCount', cors(), function (req, res) {
-
     getAttendeeCount(null, function (error, result) {
         if (error) throw error;
         if (result.length == 1) {
             res.json(result[0]);
+        }
+    });
+});
+
+app.get('/rest/getAttendeePerProfessionCount', cors(), function (req, res) {
+    getAttendeePerProfessionCount(null, function (error, result) {
+        if (error) throw error;
+        if (result.length == 1) {
+            res.json(result[0]);
+        }
+    });
+});
+
+app.get('/rest/getAttendeeCountPerDay', cors(), function (req, res) {
+    getAttendeeCountPerDay(null, function (error, result) {
+        if (error) throw error;
+        if (result.length > 0) {
+            var attendeeCountArray = [];
+            result.forEach(function (attendee) {
+                attendeeCountArray.push([attendee.CreatedDateTime, attendee.Amount]);
+            });
+            return res.json(attendeeCountArray);
+        }
+    });
+});
+
+app.get('/rest/getAttendeeCountPerMonth', cors(), function (req, res) {
+    getAttendeeCountPerMonth(null, function (error, result) {
+        if (error) throw error;
+        if (result.length > 0) {
+            var attendeeCountArray = [];
+            result.forEach(function (attendee) {
+                attendeeCountArray.push([attendee.CreatedDateTime, attendee.Amount]);
+            });
+            return res.json(attendeeCountArray);
+        }
+    });
+});
+
+app.get('/rest/getAttendeeCountPerHour', cors(), function (req, res) {
+    getAttendeeCountPerHour(null, function (error, result) {
+        if (error) throw error;
+        if (result.length > 0) {
+            var attendeeCountArray = [];
+            result.forEach(function (attendee) {
+                attendeeCountArray.push([attendee.CreatedDateTime, attendee.Amount]);
+            });
+            return res.json(attendeeCountArray);
         }
     });
 });
@@ -140,11 +301,11 @@ app.post('/rest/resendRegistration', cors(), function (req, res) {
 
 app.post('/rest/insertAttendee', cors(), function (req, res) {
     var attendee = new Attendee('ProfessionalImaging',
-        req.body.voornaam,
-        req.body.achternaam,
-        req.body.bedrijfsnaam,
-        req.body.emailadres,
-        req.body.zaterdag,
+        validator.trim(req.body.voornaam),
+        validator.trim(req.body.achternaam),
+        validator.trim(req.body.bedrijfsnaam),
+        validator.trim(req.body.emailadres),
+        validator.trim(req.body.zaterdag),
         req.body.zondag,
         req.body.maandag,
         req.body.professie,
@@ -152,10 +313,20 @@ app.post('/rest/insertAttendee', cors(), function (req, res) {
         moment().format('YYYY-MM-DD HH:mm:ss'));
 
     console.log(JSON.stringify(attendee));
-    
+
     if (req.body.inTest === "true") {
         res.json(true);
         console.log('Applicatie is in test');
+        return;
+    }
+    
+    if (!validator.isEmail(attendee.emailadres)) {
+        res.status(418).send('Geen geldig emailadres ingevoerd.');
+        return;
+    }
+    
+    if (!validator.isLength(attendee.voornaam, 1) || !validator.isLength(attendee.achternaam, 1) || !validator.isLength(attendee.emailadres, 1)) {
+        res.status(418).send('Een of meerdere van de verplichte velden hebben geen waarde.');
         return;
     }
 
@@ -168,8 +339,7 @@ app.post('/rest/insertAttendee', cors(), function (req, res) {
         }
 
         if (bestaatEmailAdres) {
-            res.statusCode = 418;
-            res.send('E-mail bestaat al in de database.');
+            res.status(418).send('E-mail bestaat al in de database.');
             return;
         }
 
@@ -220,6 +390,8 @@ var insertAttendee = edge.func('sql', function () {/*
            , @createdDateTime)
 */
 });
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 var CronJob = require('cron').CronJob;
 new CronJob('0,30 * * * * *', function () {
@@ -308,7 +480,7 @@ var createMailToSend = function (streamValue, attendee) {
     'Organisatie Professional Imaging 2015.';
     
     var mailOptions = {
-        from: 'Ticket <ticket@professionalimaging.nl>', // sender address ✔
+        from: 'Professional Imaging 2015 <ticket@professionalimaging.nl>', // sender address ✔
         to: name + ' <' + attendee.Emailaddress + '>', // list of receivers
         subject: 'TOEGANGSBEWIJS PROFESSIONAL IMAGING 2015', // Subject line
         text: text, // plaintext body
@@ -358,6 +530,51 @@ CROSS JOIN (SELECT COUNT(Maandag) as Maandag FROM Attendee WHERE Maandag = 1) Ma
 */
 });
 
+var getAttendeePerProfessionCount = edge.func('sql', {
+    source: function () {/*
+SELECT ft, pt, am, st
+FROM (SELECT COUNT(Profession) as ft FROM Attendee WHERE Profession = 'ft') ft
+CROSS JOIN (SELECT COUNT(Profession) as pt FROM Attendee WHERE Profession = 'pt') pt
+CROSS JOIN (SELECT COUNT(Profession) as am FROM Attendee WHERE Profession = 'am') am
+CROSS JOIN (SELECT COUNT(Profession) as st FROM Attendee WHERE Profession = 'st') st
+*/
+    },
+    //connectionString: connectionString
+});
+
+var getAttendeeCountPerDay = edge.func('sql', {
+    source: function () {/*
+SELECT CONVERT(varchar, CreatedDateTime, 105) as CreatedDateTime, COUNT(Id) as Amount
+FROM Attendee
+WHERE CreatedDateTime IS NOT NULL
+GROUP BY CONVERT(varchar, CreatedDateTime, 105)
+*/
+    },
+    //connectionString: connectionString
+});
+
+var getAttendeeCountPerMonth = edge.func('sql', {
+    source: function () {/*
+SELECT SUBSTRING(CONVERT(varchar, CreatedDateTime, 105), 4, 10) as CreatedDateTime, COUNT(Id) as Amount
+FROM Attendee
+WHERE CreatedDateTime IS NOT NULL
+GROUP BY SUBSTRING(CONVERT(varchar, CreatedDateTime, 105), 4, 10)
+*/
+    },
+    //connectionString: connectionString
+});
+
+var getAttendeeCountPerHour = edge.func('sql', {
+    source: function () {/*
+SELECT SUBSTRING(CONVERT(varchar, CreatedDateTime, 120), 12, 2) as CreatedDateTime, COUNT(Id) as Amount
+FROM Attendee
+WHERE CreatedDateTime IS NOT NULL
+GROUP BY SUBSTRING(CONVERT(varchar, CreatedDateTime, 120), 12, 2)
+*/
+    },
+    //connectionString: connectionString
+});
+
 var number = 0;
 app.post('/rest/generatePdf', cors(), function (req, res) {
     var newData = {
@@ -381,52 +598,26 @@ app.post('/rest/sendEmailToAttendee', cors(), function (req, res) {
     sendEmailToAttendee(attendee, function (error, result) {
         if (error) throw error;
         console.info('Daar gaan we');
-        sendMail(result, attendee, res);       
+        //sendMail(result, attendee, res);       
     });
 });
 
 var nodemailer = require('nodemailer');
-var transporter = nodemailer.createTransport();
-
-var sendMail = function (streamValue, attendee) {
-    var name = attendee.Initials + ' ' + attendee.Surname;
-    
-    var text = ' Geachte ' + name + '. <br />' +
-        '<br />' +
-    'Hartelijk dank voor uw aanmelding.<br />' +
-    'In bijlage treft u uw gratis toegangsbewijs aan.<br />' +
-    'Print deze ticket zodanig uit dat de barcode leesbaar is en neem het mee bij uw bezoek aan de beurs.<br />' +
-    'Komt u meerdere dagen dan deze ticket per dag laten scannen.<br />' +
-    '<br />' +
-    'Tot ziens op 28, 29 of 30 maart.<br />' +
-    '<br />' +
-    'Met vriendelijke groet, <br />' +
-    'Organisatie Professional Imaging 2015.';
-    
-    var mailOptions = {
-        from: 'Ticket ✔ <ticket@professionalimaging.nl>', // sender address
-        to: name +' <' + attendee.Emailaddress + '>', // list of receivers
-        subject: 'TOEGANGSBEWIJS PROFESSIONAL IMAGING 2015', // Subject line
-        text: text, // plaintext body
-        html: text, // html body
-        attachments: {
-            filename: 'Toegangsticket PI 2015.pdf',
-            content: streamValue
-        }
-    };
-    
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            console.log('Error: ' + error);
-            return false;
-        } else {
-            var message = 'Message sent to: ' + JSON.stringify(info.envelope.to);
-            console.info(message);
-            return true;
-        }
-    });
+var smtpTransport = require('nodemailer-smtp-transport');
+var smtpTransportOptions =
+{
+    host: 'mail.professionalimaging.nl',
+    port: 25,
+    secure: false,
+    auth: {
+        user: 'ticket@professionalimaging.nl',
+        pass: 'Qfwk96_8'
+    },
+    tls: {rejectUnauthorized: false},
+    debug:true
 };
 
+var transporter = nodemailer.createTransport(smtpTransport(smtpTransportOptions));
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));

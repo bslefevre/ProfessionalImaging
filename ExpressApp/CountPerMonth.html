@@ -1,0 +1,152 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aantal geregistreerde bezoekers</title>
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.time.min.js"></script>
+    <script src="http://jumjum123.github.io/JUMFlot/javascripts/JUMFlot.min.js"></script>
+    <script src="https://gflot.googlecode.com/svn-history/r154/trunk/flot/jquery.flot.axislabels.min.js"></script>
+    <style type="text/css">
+        body, div {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        #placeholder {
+            height: 100%;
+            width: 100%;
+        }
+
+        .flex-init-setup {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+        }
+
+        .flex-ppal-setup {
+            -webkit-flex-flow: column wrap;
+            -moz-flex-flow: column wrap;
+            flex-flow: column wrap;
+            -webkit-justify-content: center;
+            -moz-justify-content: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="placeholder"></div>
+
+    <script type="text/javascript">
+        $(function () {
+            $.ajax({
+                type: 'GET',
+                url: 'http://pandora.synology.me:2015/rest/getAttendeeCountPerMonth',
+                xhrFields: {
+                    withCredentials: false
+                },
+                data: null,
+                dataType: 'json',
+                success: function (data) {
+                    plotData(data);
+                }
+            });
+        });
+
+        $("<div id='tooltip'></div>").css({
+            position: "absolute",
+            display: "none",
+            border: "2px solid #000",
+            padding: "2px",
+            "background-color": "#fee",
+            opacity: 0.80,
+            'font-weight': 'bold',
+            'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif'
+        }).appendTo("body");
+
+        $("#placeholder").bind("plothover", function (event, pos, item) {
+            if (item) {
+                var x = item.datapoint[0],
+                    y = item.datapoint[1];
+                var date = new Date(x);
+                var dateStr = date.toLocaleString().slice(2, 10);
+
+                $("#tooltip").html("Aantal registraties in " + dateStr + ": " + y)
+					.css({ top: pageXOffset + 5, left: pageYOffset + 5 })
+					.fadeIn(200);
+            } else {
+                $("#tooltip").hide();
+            }
+        });
+
+        function plotData(amountPerDayData) {
+            var df2 = [];
+            for (var i = 0; i < amountPerDayData.length; i++) {
+                var from = amountPerDayData[i][0].split("-");
+                var f = new Date(from[1], from[0]-1).getTime();
+                df2.push([f, amountPerDayData[i][1]]);
+            }
+
+            var data = [
+                {
+                    label: "Geregistreerde bezoekers per maand", data: df2, bars: {
+                        show: true, align: "center",
+                        fill: true,
+                        barWidth: 24 * 60 * 60 * 30 * 1000
+                    },
+                    lines: { show: false }, points: { show: false },
+                    grow: { stepMode: "linear", stepDirection: "up", steps: 80 }
+                }
+            ];
+            var options = {
+                grid: {
+                    hoverable: true,
+                    axisMargin: 20
+                },
+                series: {
+                    grow: { active: true },
+                    bars: { show: true }
+                },
+                xaxis: {
+                    align: 'center',
+                    mode: "time",
+                    timezone: "browser",
+                    timeformat: '%b %Y',
+                    tickSize: [1, "month"],
+                    tickLength: 0,
+                    color: "black",
+                    font: {
+                        weight: "bold",
+                        family: "Verdana, Arial"
+                    },
+                    axisLabelUseCanvas: true,
+                    axisLabelUseHtml: true,
+                    axisLabelFontSizePixels: 20,
+                    axisLabelFontFamily: 'Verdana, Arial',
+                    axisLabelPadding: 10
+                },
+                yaxis: {
+                    color: "black",
+                    tickDecimals: 0,
+                    axisLabel: "Registraties per maand",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 20,
+                    axisLabelFontFamily: 'Verdana, Arial',
+                    axisLabelPadding: 10
+                },
+                clickable: true, hoverable: true,
+            };
+            var p = $.plot($("#placeholder"), data, options);
+        }
+    </script>
+</body>
+</html>
