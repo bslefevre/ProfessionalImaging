@@ -27,6 +27,36 @@ var getAttendee = edge.func('sql', {
     //connectionString: connectionString
 });
 
+var getSearchedAttendee = edge.func('sql', {
+    source: function () {/*
+SELECT * FROM Attendee
+WHERE(@company = ''OR Company LIKE CONCAT('%', @company, '%'))
+AND(@initials = ''OR Initials LIKE CONCAT('%', @initials, '%'))
+AND (@surname = '' OR Surname LIKE CONCAT('%', @surname, '%'))
+AND (@emailaddress = '' OR Emailaddress LIKE CONCAT('%', @emailaddress, '%'))
+    */},
+    //connectionString: connectionString
+});
+
+var getamountOfRegisteredAttendee = edge.func('sql', {
+    source: function () {/*
+    SELECT COUNT(*) as Amount FROM Attendee
+    */},
+    //connectionString: connectionString
+});
+
+var getAttendeeCountOfToday = edge.func('sql', {
+    source: function () {/*
+SELECT CONVERT(varchar, CreatedDateTime, 105) as CreatedDateTime, COUNT(Id) as Amount
+FROM Attendee
+WHERE CreatedDateTime IS NOT NULL
+AND CONVERT(varchar, CreatedDateTime, 105) = CONVERT(varchar, GETDATE(), 105)
+GROUP BY CONVERT(varchar, CreatedDateTime, 105)
+*/
+    },
+    //connectionString: connectionString
+});
+
 var users = getAttendee(null, function (error, result) {
     if (error) { logError(error, res); return; }
     if (result) {
@@ -63,7 +93,20 @@ function ScannedAttendee(dateTime, barcode){
 }
 
 exports.index = function (req, res) {
-    res.render('index', { title: 'Express', year: new Date().getFullYear() });
+    getamountOfRegisteredAttendee(null, function (error, result) {
+        if (error) { logError(error, res); return; }
+        if (result) {
+            var amountOfRegisteredAttendee = result[0].Amount;
+            getAttendeeCountOfToday(null, function (error, result) {
+                if (error) { logError(error, res); return; }
+                if (result) {
+                    var attendeeCountOfToday = result[0].Amount;
+                    res.render('index', { title: 'Home', year: new Date().getFullYear(), amountOfRegisteredAttendee: amountOfRegisteredAttendee, attendeeCountOfToday: attendeeCountOfToday });
+                }
+            });
+        }
+    });
+    
     lazyRead();
 };
 
@@ -75,8 +118,32 @@ exports.contact = function (req, res) {
     res.render('contact', { title: 'Contact', year: new Date().getFullYear(), message: 'Your contact page.' });
 };
 
-exports.attendee = function (req, res) {
+var ietsIngevuld = function (attendee) {
+    return (attendee.initials && attendee.initials != '') ||
+        (attendee.surname && attendee.surname != '') ||
+        (attendee.company && attendee.company != '') ||
+        (attendee.emailaddress && attendee.emailaddress != '')
+};
+
+exports.search = function (req, res) {
+    var searchedAttendeeList = [];
     
+    if (req.method === "POST" && ietsIngevuld(req.body)) {
+        getSearchedAttendee(req.body, function (error, result) {
+            if (error) { logError(error, res); return; }
+            if (result) {
+                result.forEach(function (attendee) {
+                    searchedAttendeeList.push(attendee);
+                });
+                res.render('search', { title: 'Zoek', message: 'Zoek hier je gebruikers', year: new Date().getFullYear(), attendeeList: searchedAttendeeList });
+            }
+        });
+    } else {
+        res.render('search', { title: 'Zoek', message: 'Zoek hier je gebruikers', year: new Date().getFullYear(), attendeeList: [] });
+    }
+};
+
+exports.attendee = function (req, res) {
     //testInsert();
     
     getAttendee(null, function (error, result) {

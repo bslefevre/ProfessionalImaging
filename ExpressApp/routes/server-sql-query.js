@@ -60,7 +60,13 @@ var sendEmailToAttendee = edge.func({
     assemblyFile: process.env.PORT ? 'bin/AttendeeClassLibrary.dll' : attendeeClassLibrary,
     typeName: 'AttendeeClassLibrary.SendEmail',
     methodName: 'SendEmailToAttendee'
-})
+});
+
+var printTicketToGoogleCloudPrint = edge.func({
+    assemblyFile: process.env.PORT ? 'bin/AttendeeClassLibrary.dll' : attendeeClassLibrary,
+    typeName: 'AttendeeClassLibrary.SendEmail',
+    methodName: 'PrintToGoogleCloudPrinter'
+});
 
 function logError(err, res) {
     res.writeHead(200, { 'Content-Type': 'text/plain' });

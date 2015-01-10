@@ -13,13 +13,15 @@ var cors = require('cors');
 var moment = require('moment');
 var connectionString = 'Data Source=THUNDER;Initial Catalog=ProfessionalImaging;User Id=sa;Password =Welkom01;';
 var validator = require('validator');
+var favicon = require('serve-favicon');
 
 var app = express();
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.use(express.favicon());
+app.use(favicon(path.join(__dirname, 'public', 'images', 'dc.ico')));
+//app.use(favicon(__dirname + '/public/images/favicon.ico?v=2'));
 
 express.logger.format('dev', function (tokens, req, res) {
     var status = res.statusCode
@@ -33,17 +35,17 @@ express.logger.format('dev', function (tokens, req, res) {
     var dateTime = moment().format('YYYY-MM-DD HH:mm:ss');
     
     var logText = '\x1b[90m' + req.method 
-    + ' ' + dateTime
-    + ' ' + remoteAddr
-    + ' ' + req.originalUrl + ' '
+    + ' ' + dateTime 
+    + ' ' + remoteAddr 
+    + ' ' + req.originalUrl + ' ' 
     + '\x1b[' + color + 'm' + res.statusCode 
     + ' \x1b[90m' 
-    + (new Date- req._startTime) 
-    + 'ms'
+    + (new Date - req._startTime) 
+    + 'ms' 
     + '\x1b[0m';
     
     var userAgent = req.headers['user-agent'];
-
+    
     var allLoggingText = [];
     allLoggingText.push(req.method);
     allLoggingText.push(status.toString());
@@ -51,9 +53,9 @@ express.logger.format('dev', function (tokens, req, res) {
     allLoggingText.push(remoteAddr);
     allLoggingText.push(req.originalUrl);
     allLoggingText.push(userAgent);
-
+    
     fs.appendFile(__dirname + '/logging/' + moment().format('YYYY-MM-DD') + '_debug.csv', toLongString(allLoggingText) + '\n');
-
+    
     return logText;
 });
 
@@ -69,7 +71,7 @@ var toLongString = function (stringArray) {
         }
         line.push(item);
     }
-
+    
     return line;
 }
 
@@ -87,7 +89,7 @@ app.use(express.urlencoded());
 app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.static(path.join(__dirname, 'RegistratieForm')));
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -105,8 +107,10 @@ app.get('/', routes.index);
 app.get('/about', routes.about);
 app.get('/contact', routes.contact);
 app.get('/bezoekers', routes.attendee);
+app.get('/search', routes.search)
+app.post('/search', cors(), routes.search);
 
-function Attendee(contract, voornaam, achternaam, bedrijfsnaam, emailadres, zaterdag, zondag, maandag, professie, nieuwsbrief, createdDateTime){
+function Attendee(contract, voornaam, achternaam, bedrijfsnaam, emailadres, zaterdag, zondag, maandag, professie, nieuwsbrief, createdDateTime, inTest, directPrinten) {
     this.contract = contract;
     this.voornaam = voornaam;
     this.achternaam = achternaam;
@@ -118,7 +122,22 @@ function Attendee(contract, voornaam, achternaam, bedrijfsnaam, emailadres, zate
     this.professie = professie;
     this.nieuwsbrief = nieuwsbrief;
     this.createdDateTime = createdDateTime;
+    this.inTest = inTest;
+    this.directPrinten = directPrinten;
 }
+
+app.get('/registreren', cors(), function (req, res) {
+    fs.readFile('RegistratieForm/Form.html', function (error, content) {
+        if (error) {
+            res.writeHead(500);
+            res.end();
+        }
+        else {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(content, 'utf-8');
+        }
+    });
+});
 
 app.get('/info/bezoekersPerDag', cors(), function (req, res) {
     fs.readFile('./AmountPerDay.html', function (error, content) {
@@ -306,18 +325,22 @@ app.post('/rest/insertAttendee', cors(), function (req, res) {
         validator.trim(req.body.bedrijfsnaam),
         validator.trim(req.body.emailadres),
         validator.trim(req.body.zaterdag),
-        req.body.zondag,
-        req.body.maandag,
+        validator.trim(req.body.zondag),
+        validator.trim(req.body.maandag),
         req.body.professie,
 		req.body.nieuwsbrief,
-        moment().format('YYYY-MM-DD HH:mm:ss'));
-
+        moment().format('YYYY-MM-DD HH:mm:ss'),
+        req.body.inTest === "true",
+        req.body.directPrinten === "true"
+);
+    
     console.log(JSON.stringify(attendee));
-
-    if (req.body.inTest === "true") {
-        res.json(true);
+    
+    if (attendee.inTest) {
+        //res.json(true);
         console.log('Applicatie is in test');
-        return;
+        //res.status(418).send('Applicatie is in test modus.');
+        //return;
     }
     
     if (!validator.isEmail(attendee.emailadres)) {
@@ -329,7 +352,7 @@ app.post('/rest/insertAttendee', cors(), function (req, res) {
         res.status(418).send('Een of meerdere van de verplichte velden hebben geen waarde.');
         return;
     }
-
+    
     checkOpBestaandEmailAdres(attendee, function (error, result) {
         var bestaatEmailAdres = false;
         
@@ -337,18 +360,21 @@ app.post('/rest/insertAttendee', cors(), function (req, res) {
         if (result) {
             if (result.length > 0) bestaatEmailAdres = true;
         }
-
-        if (bestaatEmailAdres) {
+        
+        if (bestaatEmailAdres && !attendee.inTest) {
             res.status(418).send('E-mail bestaat al in de database.');
             return;
         }
-
+        
         insertAttendee(attendee, function (error, result) {
             if (error) { logError(error, res); return; }
             if (result) {
                 if (result == 1) {
                     res.json(true);
                     console.log('Toegevoegd');
+                    if (attendee.directPrinten) {
+                        printTicket(attendee);
+                    }
                 }
             }
             else {
@@ -375,7 +401,8 @@ var insertAttendee = edge.func('sql', function () {/*
            ,[Maandag]
            ,[Profession]
 		   ,[Nieuwsbrief]
-           ,[CreatedDateTime])
+           ,[CreatedDateTime]
+           ,[Processed])
      VALUES
            (@contract
 		   , @bedrijfsnaam
@@ -387,7 +414,8 @@ var insertAttendee = edge.func('sql', function () {/*
 		   , @maandag
 		   , @professie
 		   , @nieuwsbrief
-           , @createdDateTime)
+           , @createdDateTime
+           , @directPrinten)
 */
 });
 
@@ -450,7 +478,7 @@ var sendMailToUnprocessedAttendee = function () {
                                 }
                             });
                         }
-
+                        
                         hoeveelMails--;
                         if (hoeveelMails == 0) {
                             console.log('===========================================================================');
@@ -482,7 +510,7 @@ var createMailToSend = function (streamValue, attendee) {
     var mailOptions = {
         from: 'Professional Imaging 2015 <ticket@professionalimaging.nl>', // sender address ✔
         to: name + ' <' + attendee.Emailaddress + '>', // list of receivers
-        subject: 'TOEGANGSBEWIJS PROFESSIONAL IMAGING 2015', // Subject line
+        subject: 'Toegangsbewijs Professional Imaging 2015', // Subject line
         text: text, // plaintext body
         html: text, // html body
         attachments: {
@@ -575,6 +603,26 @@ GROUP BY SUBSTRING(CONVERT(varchar, CreatedDateTime, 120), 12, 2)
     //connectionString: connectionString
 });
 
+var getInsertedAttendeeForDirectPrint = edge.func('sql', {
+    source: function () {/*
+SELECT TOP (1) Id FROM Attendee
+WHERE Initials = @voornaam
+AND Surname = @achternaam
+AND Emailaddress = @emailadres
+*/
+    },
+    //connectionString: connectionString
+});
+
+var getAttendee = edge.func('sql', {
+    source: function () {/*
+SELECT TOP (1) * FROM Attendee
+WHERE Id = @Id
+*/
+    },
+    //connectionString: connectionString
+});
+
 var number = 0;
 app.post('/rest/generatePdf', cors(), function (req, res) {
     var newData = {
@@ -605,19 +653,53 @@ app.post('/rest/sendEmailToAttendee', cors(), function (req, res) {
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 var smtpTransportOptions =
-{
-    host: 'mail.professionalimaging.nl',
+ {
+    host: 'smtp.professionalimaging.nl',
     port: 25,
     secure: false,
     auth: {
         user: 'ticket@professionalimaging.nl',
         pass: 'Qfwk96_8'
     },
-    tls: {rejectUnauthorized: false},
-    debug:true
+    tls: { rejectUnauthorized: false },
+    debug: false
 };
 
 var transporter = nodemailer.createTransport(smtpTransport(smtpTransportOptions));
+
+var printTicket = function (attendee) {
+    getInsertedAttendeeForDirectPrint(attendee, function (error, result) {
+        if (error) { logError(error, res); return; }
+        if (result && result.length == 1) {
+            attendee.Id = result[0].Id;
+            printTicketToGoogleCloudPrint(attendee, function (error, result) {
+                if (error) throw error;
+                console.info(result);
+            });
+        } else {
+            console.info('Bezoeker ' + attendee.voornaam + ' ' + attendee.achternaam + ' niet gevonden.');
+        }
+    });
+};
+
+app.post('/rest/reprintTicket', cors(), function (req, res) {
+    req.body.inTest = req.body.inTest === "true";
+    getAttendee(req.body, function (error, result) {
+        if (error) { logError(error, result); return; }
+        if (result && result.length == 1) {
+            var tempAttendee = [{ 'Id': result[0].Id, 'voornaam': result[0].Initials, 'achternaam': result[0].Surname, 'inTest': req.body.inTest }];
+            printTicketToGoogleCloudPrint(tempAttendee[0], function (error, result) {
+                if (error) throw error;
+                console.info(result);
+                res.json(result);
+            });
+        } else {
+            var message = 'Bezoeker ' + attendee.Id + ' niet gevonden.';
+            console.info(message);
+            res.send(message);
+        }
+    });
+});
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));

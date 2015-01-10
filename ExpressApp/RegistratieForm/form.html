@@ -1,0 +1,267 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Registratiepagina Professional Imaging 2015</title>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="js/Notification.js"></script>
+    <link rel="stylesheet" href="./form.css">
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" href="ie/form_ie.css">
+    <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div id="messageDiv" class="message"></div>
+    <h1>REGISTRATIEPAGINA voor GRATIS Toegangsticket<br /><span> Professional Imaging 2015</span></h1>
+    <form method="post" action="" class="css_form" id="formulier" name="formulier">
+        <fieldset>
+            <label for="text_field" class="left_element">Voornaam<span class="required">*</span></label>
+            <div class="tooltip">
+                <input type="text" name="voornaam" id="voornaam" value="" size="30" placeholder="Voornaam" class="tooltip" required />
+                <span class="tooltip_content">
+                    Vul hier uw voornaam in.
+                </span>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <label for="text_field" class="left_element">Achternaam<span class="required">*</span></label>
+            <div class="tooltip">
+                <input type="text" name="achternaam" id="achternaam" value="" size="30" placeholder="Achternaam" class="tooltip" required />
+                <span class="tooltip_content">
+                    Vul hier uw achternaam in.
+                </span>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <label for="text_field" class="left_element">Bedrijfsnaam<span class="required"></span></label>
+            <div class="tooltip">
+                <input type="text" name="bedrijfsnaam" id="bedrijfsnaam" value="" size="30" placeholder="Bedrijfsnaam" class="tooltip" />
+                <span class="tooltip_content">
+                    Vul hier uw bedrijfsnaam in.
+                </span>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <label for="text_field" class="left_element">Email adres<span class="required">*</span></label>
+            <div class="tooltip">
+                <input type="email" name="emailadres" id="emailadres" value="" size="30" placeholder="Email adres" class="tooltip" required />
+                <span class="tooltip_content">
+                    Vul hier een uniek email adres in.
+                </span>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <label class="left_element">Ik ben werkzaam als:<span class="required">*</span></label>
+            <ul class="form_options">
+                <li><label><input type="radio" id="professie" name="professie" value="ft" required /><span></span></label><span class="desc_text">Professional – full time</span></li>
+                <li><label><input type="radio" id="professie" name="professie" value="pt" /><span></span></label><span class="desc_text">Semi professional – parttime</span></li>
+                <li><label><input type="radio" id="professie" name="professie" value="st" /><span></span></label><span class="desc_text">Student</span></li>
+                <li><label><input type="radio" id="professie" name="professie" value="am" /><span></span></label><span class="desc_text">Amateur</span></li>
+            </ul>
+        </fieldset>
+        
+        <fieldset>
+            <div class="tooltip">
+                <span class="tooltip_content">
+                    U gaat akkoord met toezending van 8 nieuwsbrieven inzake P.I. 2015 & PIA d’Or.
+                </span>
+                <label class="left_element tooltip">Nieuwsbrief ontvangen?<span class="required">*</span></label>
+
+            <fieldset class="form_toggle">
+                <input id="nieuwsbrief" type="checkbox" />
+                <label class="toggle_label" for="toggle1"><span>Ja</span><span>Nee</span></label>
+                <span class="toggle_button"></span>
+            </fieldset>
+             </div>
+
+        </fieldset>
+
+        <fieldset>
+            <div class="tooltip">
+                <span class="tooltip_content">
+                    U gaat akkoord met het opslaan van bovenstaande ingevulde gegevens.
+                </span>
+                <label class="left_element tooltip">Accepteer de gegevens<span class="required">*</span></label>
+
+            <fieldset class="form_toggle">
+                <input id="toggle1" type="checkbox" required />
+                <label class="toggle_label" for="toggle1"><span>Ja</span><span>Nee</span></label>
+                <span class="toggle_button"></span>
+            </fieldset>
+             </div>
+
+        </fieldset>
+
+        <fieldset>
+
+            <ul class="form_buttons">
+                <li><input type="reset" value="Reset" /></li>
+                <li><input type="submit" value="Submit" /></li>
+            </ul>
+
+        </fieldset>
+
+        <div id="result"></div>
+
+        <div class="clear"></div>
+        <fieldset style="text-align:center; cursor:pointer; display:none;"><span onclick="$('#resendRegistrationDiv').show()">verstuur registratie opnieuw</span></fieldset>
+    </form>
+    <div id="resendRegistrationDiv" style="display: none;">
+        <form method="post" action="" class="css_form" id="resendRegistrationForm">
+            <fieldset style="padding:10px;">
+                <fieldset>
+                    <h4 style="margin-left:10px;">Vraag registratieformulier opnieuw op:</h4>
+
+                    <label for="emailTextbox" class="left_element">Email adres<span class="required">*</span></label>
+                    <div class="tooltip">
+                        <input type="email" id="resendRegistrationEmail" value="" size="30" placeholder="Email adres" class="tooltip" required oninvalid="checkMailAddress(this)" oninput="checkMailAddress(this)" />
+                        <span class="tooltip_content">
+                            Vul hier uw email adres in.
+                        </span>
+                    </div>
+                    <label class="left_element"></label>
+                    <label id="resendRegistrationResult"></label>
+                </fieldset>
+                <fieldset>
+                    <ul class="form_buttons">
+                        <li>
+                            <input type="submit" value="Verstuur" />
+                        </li>
+                    </ul>
+                </fieldset>
+            </fieldset>
+        </form>
+    </div>
+    <style>
+        .percentageWidthUl {
+            width: 55%;
+        }
+
+        #zaterdag, #zondag, #maandag {
+            margin-top: 4px;
+            float: right;
+        }
+
+        #zaterdagColor, #zondagColor, #maandagColor {
+            margin-top: 3px;
+            background-color: green;
+            height: 14px;
+            width: 14px;
+            -webkit-border-radius: 7px;
+            -moz-border-radius: 7px;
+            position: absolute;
+        }
+
+        #zaterdagText, #zondagText, #maandagText {
+            padding-top: 15px;
+            margin-left: 20px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function checkMailAddress(textbox) {
+            if (textbox.value == '') {
+                textbox.setCustomValidity('Vul een email adres in');
+            }
+            else if (textbox.validity.typeMismatch) {
+                textbox.setCustomValidity('Vul een geldig email adres in');
+            }
+            else {
+                textbox.setCustomValidity('');
+            }
+            return true;
+        }
+
+        function resendRegistration(emailaddress) {
+            $.ajax({
+                type: 'POST',
+                url: 'http://pandora.synology.me:2014/rest/resendRegistration',
+                xhrFields: {
+                    withCredentials: false
+                },
+                data: { 'emailaddress': emailaddress },
+                dataType: 'json',
+                success: function (data) {
+                    $("#resendRegistrationForm").trigger("reset");
+                    showMessageTrigger(data, 'success');
+                },
+                error: function (data) {
+                    if (data.status === 418) {
+                        showMessageTrigger(data.responseJSON, 'warning');
+                    } else {
+                        showMessageTrigger(data.responseText == '' ? 'Onbekende fout' : data.responseText, 'error');
+                    }
+                }
+            });
+        }
+
+        $("#resendRegistrationForm").submit(function (event) {
+            event.preventDefault();
+
+            resendRegistration($("#resendRegistrationEmail").val());
+        });
+
+        $("#formulier").submit(function (event) {
+            event.preventDefault();
+
+            $form = $(this);
+
+            var values = {};
+
+            var voornaam = $("#voornaam");
+            var achternaam = $("#achternaam");
+            var bedrijfsnaam = $("#bedrijfsnaam");
+            var emailadres = $("#emailadres");
+
+            var zaterdag = $("#zaterdag");
+            var zondag = $("#zondag");
+            var maandag = $("#maandag");
+
+            values['voornaam'] = voornaam.val();
+            values['achternaam'] = achternaam.val();
+            values['bedrijfsnaam'] = bedrijfsnaam.val();
+            values['emailadres'] = emailadres.val();
+
+            values['zaterdag'] = zaterdag.prop('checked');
+            values['zondag'] = zondag.prop('checked');
+            values['maandag'] = maandag.prop('checked');
+
+            var professie = $('input:radio[name=professie]:checked');
+            values['professie'] = professie.val();
+			
+			values['nieuwsbrief'] = $('#nieuwsbrief').prop('checked');
+            
+            values['inTest'] = true;
+			values['directPrinten'] = true;
+
+            $.ajax({
+                type: 'POST',
+                url: '/rest/insertAttendee',
+                xhrFields: {
+                    withCredentials: false
+                },
+                data: values,
+                dataType: 'json',
+                success: function (data) {
+                    $form.trigger("reset");
+                    showMessageTrigger('Registratie is gelukt!', 'success');
+                },
+                error: function (data) {
+                    if (data.status === 418) {
+                        showMessageTrigger(data.responseText, 'warning');
+                    } else {
+                        showMessageTrigger(data.responseText == '' ? 'Onbekende fout' : data.responseText, 'error');
+                    }
+                }
+            });
+
+            return true;
+        });
+    </script>
+</body>
+</html>

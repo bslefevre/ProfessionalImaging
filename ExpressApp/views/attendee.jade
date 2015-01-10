@@ -3,6 +3,8 @@
 block content
   .jumbotron
     h1 Bezoekers
+    p.leader De volledige lijst van bezoekers welke in de database staan met de check of het mailversturen gelukt is
+      p Dit zegt niks over of de protagonist mailserver mailadressen heeft gebounced
   .row
     .col-xs-3
       h4 Naam
@@ -16,9 +18,9 @@ block content
     each val in values.length ? values : ['There are no values']
       .row
         .col-xs-3
-          p= (val.Id) + ' ' + val.Initials + ' ' + val.Surname
+          p= '(' + val.Id + ')' + ' ' + val.Initials + ' ' + val.Surname
         .col-xs-3
-          input(type='checkbox', checked=val.Errorlog == null) 
+          input(type='checkbox', checked=val.Errorlog == null, onclick='return false')
         .col-xs-3
           p=val.CreatedDateTime
         .col-xs-3

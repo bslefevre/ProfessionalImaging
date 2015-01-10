@@ -1,0 +1,90 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'os' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.32
+4 verbose node symlink C:\Program Files\nodejs\\node.exe
+5 warn package.json fs@0.0.2 fs is also the name of a node core module.
+6 warn package.json fs@0.0.2 No description
+7 warn package.json fs@0.0.2 No repository field.
+8 warn package.json fs@0.0.2 No README data
+9 verbose cache add [ 'os', null ]
+10 verbose cache add name=undefined spec="os" args=["os",null]
+11 verbose parsed url { protocol: null,
+11 verbose parsed url   slashes: null,
+11 verbose parsed url   auth: null,
+11 verbose parsed url   host: null,
+11 verbose parsed url   port: null,
+11 verbose parsed url   hostname: null,
+11 verbose parsed url   hash: null,
+11 verbose parsed url   search: null,
+11 verbose parsed url   query: null,
+11 verbose parsed url   pathname: 'os',
+11 verbose parsed url   path: 'os',
+11 verbose parsed url   href: 'os' }
+12 silly lockFile 999a3419-os os
+13 verbose lock os C:\Users\Doggie\AppData\Roaming\npm-cache\999a3419-os.lock
+14 silly lockFile 999a3419-os os
+15 silly lockFile 999a3419-os os
+16 verbose addNamed [ 'os', '' ]
+17 verbose addNamed [ null, '*' ]
+18 silly lockFile 46c56d42-os os@
+19 verbose lock os@ C:\Users\Doggie\AppData\Roaming\npm-cache\46c56d42-os.lock
+20 silly addNameRange { name: 'os', range: '*', hasData: false }
+21 verbose request where is /os
+22 verbose request registry https://registry.npmjs.org/
+23 verbose request id 88b0feb46b654222
+24 verbose url raw /os
+25 verbose url resolving [ 'https://registry.npmjs.org/', './os' ]
+26 verbose url resolved https://registry.npmjs.org/os
+27 verbose request where is https://registry.npmjs.org/os
+28 info trying registry request attempt 1 at 15:03:23
+29 http GET https://registry.npmjs.org/os
+30 http 404 https://registry.npmjs.org/os
+31 verbose headers { date: 'Sat, 10 Jan 2015 14:03:23 GMT',
+31 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+31 verbose headers   'content-type': 'application/json',
+31 verbose headers   'cache-control': 'max-age=0',
+31 verbose headers   'content-length': '52',
+31 verbose headers   'accept-ranges': 'bytes',
+31 verbose headers   via: '1.1 varnish',
+31 verbose headers   age: '0',
+31 verbose headers   'x-served-by': 'cache-ams4145-AMS',
+31 verbose headers   'x-cache': 'MISS',
+31 verbose headers   'x-cache-hits': '0',
+31 verbose headers   'x-timer': 'S1420898603.416212,VS0,VE167',
+31 verbose headers   'keep-alive': 'timeout=10, max=50',
+31 verbose headers   connection: 'Keep-Alive' }
+32 silly registry.get cb [ 404,
+32 silly registry.get   { date: 'Sat, 10 Jan 2015 14:03:23 GMT',
+32 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+32 silly registry.get     'content-type': 'application/json',
+32 silly registry.get     'cache-control': 'max-age=0',
+32 silly registry.get     'content-length': '52',
+32 silly registry.get     'accept-ranges': 'bytes',
+32 silly registry.get     via: '1.1 varnish',
+32 silly registry.get     age: '0',
+32 silly registry.get     'x-served-by': 'cache-ams4145-AMS',
+32 silly registry.get     'x-cache': 'MISS',
+32 silly registry.get     'x-cache-hits': '0',
+32 silly registry.get     'x-timer': 'S1420898603.416212,VS0,VE167',
+32 silly registry.get     'keep-alive': 'timeout=10, max=50',
+32 silly registry.get     connection: 'Keep-Alive' } ]
+33 silly lockFile 46c56d42-os os@
+34 silly lockFile 46c56d42-os os@
+35 error 404 404 Not Found: os
+35 error 404
+35 error 404 'os' is not in the npm registry.
+35 error 404 You should bug the author to publish it
+35 error 404
+35 error 404 Note that you can also install from a
+35 error 404 tarball, folder, or http url, or git url.
+36 error System Windows_NT 6.2.9200
+37 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "os"
+38 error cwd C:\Users\Doggie\Documents\GitHub\ProfessionalImaging
+39 error node -v v0.10.32
+40 error npm -v 1.4.28
+41 error code E404
+42 verbose exit [ 1, true ]

@@ -6,6 +6,7 @@ html
     title #{title} - Profession Imaging
     link(rel='stylesheet', type='text/css', href='/stylesheets/bootstrap.min.css')
     link(rel='stylesheet', type='text/css', href='/stylesheets/style.css')
+    link(rel='shortcut icon' href='/images/dc.ico')
     script(src='/javascripts/modernizr-2.6.2.js')
   body
     .navbar.navbar-inverse.navbar-fixed-top
@@ -22,6 +23,8 @@ html
               a(href='/') Home
             li
               a(href='/bezoekers') Bezoekers
+            li
+              a(href='/search') Zoek bezoekers
     .container.body-content
       block content
       hr

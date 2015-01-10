@@ -1,0 +1,77 @@
+﻿extends layout
+
+block content
+  script.
+   function reprint(attendeeId) {
+     $.ajax({
+                type: 'POST',
+                url: '/rest/reprintTicket',
+                xhrFields: {
+                    withCredentials: false
+                },
+                data: {'Id': attendeeId, 'inTest': true},
+                dataType: 'json',
+                success: function (data) {
+                    alert('Afdruktaak is toegevoegd');
+                    console.log(JSON.stringify(data));
+                },
+                error: function (data) {
+                    alert("ERROR:: " + JSON.stringify(data));
+                }
+            });
+   }
+
+  .jumbotron
+    h1 Zoek bezoekers
+    p.leader Zoek hier op verschillende velden naar geregistreerde bezoekers
+
+  form(method='POST', action="")
+    table
+      tr
+        td(style='width:150px')
+          p Voornaam
+        td
+          input(type='text', id='initials', name='initials', placeholder='Voornaam')
+      tr
+        td
+          p Achternaam
+        td
+          input(type='text', id='surname', name='surname', placeholder='Achternaam')
+      tr
+        td
+          p Bedrijfsnaam
+        td
+          input(type='text', id='company', name='company', placeholder='Bedrijfsnaam')
+      tr
+        td
+          p E-mailadres
+        td
+          input(type='text', id='emailaddress', name='emailaddress', placeholder='E-mailadres')
+    
+    input.btn.btn-primary.btn-large(type='submit', value='Zoek')
+
+  .row
+    .col-xs-3
+      h4 Naam
+    .col-xs-3
+      h4 Aanmaakdatum
+    .col-xs-3
+      h4 Emailadres
+    .col-xs-3
+      H4 Herprint
+
+  - var values = attendeeList;
+    each val in values.length ? values : ['Er zijn geen zoekresultaten']
+      if (val == ['Er zijn geen zoekresultaten'])
+        p=val
+      else
+        .row
+          .col-xs-3
+            p= '(' + val.Id + ')' + ' ' + val.Initials + ' ' + val.Surname
+          .col-xs-3
+            p=val.CreatedDateTime
+          .col-xs-3
+            p= val.Emailaddress
+          .col-xs-3
+            p
+              a.btn.btn-default(href='/', onclick='reprint(#{val.Id}); return false') Print
