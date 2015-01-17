@@ -21,7 +21,6 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(favicon(path.join(__dirname, 'public', 'images', 'dc.ico')));
-//app.use(favicon(__dirname + '/public/images/favicon.ico?v=2'));
 
 express.logger.format('dev', function (tokens, req, res) {
     var status = res.statusCode
@@ -109,6 +108,8 @@ app.get('/contact', routes.contact);
 app.get('/bezoekers', routes.attendee);
 app.get('/search', routes.search)
 app.post('/search', cors(), routes.search);
+app.get('/scan/aantalPerDag', routes.scannedAttendee);
+app.get('/scan', routes.scan);
 
 function Attendee(contract, voornaam, achternaam, bedrijfsnaam, emailadres, zaterdag, zondag, maandag, professie, nieuwsbrief, createdDateTime, inTest, directPrinten) {
     this.contract = contract;
@@ -288,6 +289,19 @@ app.get('/rest/getAttendeeCountPerHour', cors(), function (req, res) {
     });
 });
 
+app.get('/rest/getScannedBarcodeCountPerDay', cors(), function (req, res) {
+    getScannedBarcodeCountPerDay(null, function (error, result) {
+        if (error) throw error;
+        if (result.length > 0) {
+            var attendeeCountArray = [];
+            result.forEach(function (attendee) {
+                attendeeCountArray.push([attendee.CreatedDateTime, attendee.Scanned, attendee.Predicted, attendee.Total]);
+            });
+            return res.json(attendeeCountArray);
+        }
+    });
+});
+
 app.post('/rest/resendRegistration', cors(), function (req, res) {
     var emailadres = req.body.emailaddress;
     
@@ -402,7 +416,8 @@ var insertAttendee = edge.func('sql', function () {/*
            ,[Profession]
 		   ,[Nieuwsbrief]
            ,[CreatedDateTime]
-           ,[Processed])
+           ,[Processed]
+           ,[LocallyAdded])
      VALUES
            (@contract
 		   , @bedrijfsnaam
@@ -415,6 +430,7 @@ var insertAttendee = edge.func('sql', function () {/*
 		   , @professie
 		   , @nieuwsbrief
            , @createdDateTime
+           , @directPrinten
            , @directPrinten)
 */
 });
@@ -609,6 +625,24 @@ SELECT TOP (1) Id FROM Attendee
 WHERE Initials = @voornaam
 AND Surname = @achternaam
 AND Emailaddress = @emailadres
+*/
+    },
+    //connectionString: connectionString
+});
+
+var getScannedBarcodeCountPerDay = edge.func('sql', {
+    source: function () {/*
+SELECT CONVERT(varchar, barcode.CreatedDateTime, 105) as CreatedDateTime, COUNT(DISTINCT(id)) as Scanned,
+(
+  SELECT COUNT(*) FROM Attendee
+  WHERE (Zaterdag = 1 AND CONVERT(varchar, barcode.CreatedDateTime, 105) = '15-01-2015')
+  OR (Zondag = 1 AND CONVERT(varchar, barcode.CreatedDateTime, 105) = '16-01-2015')
+  OR (Maandag = 1 AND CONVERT(varchar, barcode.CreatedDateTime, 105) = '17-01-2015')
+) as Predicted,
+COUNT(Id) as Total
+FROM ScannedBarcodes barcode
+WHERE barcode.CreatedDateTime IS NOT NULL
+GROUP BY CONVERT(varchar, barcode.CreatedDateTime, 105)
 */
     },
     //connectionString: connectionString

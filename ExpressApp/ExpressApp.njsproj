@@ -32,16 +32,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="public\javascripts\custom.js" />
     <Compile Include="public\javascripts\jquery.flot.axislabels.js" />
     <Compile Include="public\javascripts\jquery.flot.min.js" />
     <Compile Include="public\javascripts\jquery.flot.symbol.js" />
     <Compile Include="public\javascripts\jquery.numberformatter-1.2.3.min.js" />
     <Compile Include="public\javascripts\jshashtable-2.1.js" />
     <Compile Include="public\javascripts\JUMFlot.min.js" />
+    <Compile Include="public\javascripts\requests\countPerDay.js" />
+    <Compile Include="public\javascripts\requests\diffWithLastYear.js" />
+    <Compile Include="public\javascripts\requests\growl.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\server-sql-query.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="public\stylesheets\custom.css" />
+    <Content Include="public\stylesheets\custom2.css" />
+    <Content Include="views\registration.jade" />
+    <Content Include="views\scan.jade" />
+    <Content Include="views\scannedAttendee.jade" />
     <Content Include="views\search.jade" />
     <None Include="NodeJS.pubxml" />
     <Content Include="AmountPerDay.html" />
@@ -93,6 +102,7 @@
     <Folder Include="public\fonts\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
+    <Folder Include="public\javascripts\requests\" />
     <Folder Include="public\stylesheets\" />
     <Folder Include="routes\" />
     <Folder Include="views\" />

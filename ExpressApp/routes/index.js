@@ -57,6 +57,25 @@ GROUP BY CONVERT(varchar, CreatedDateTime, 105)
     //connectionString: connectionString
 });
 
+var getScannedBarcodeCountPerDay = edge.func('sql', {
+    source: function () {/*
+SELECT CONVERT(varchar, barcode.CreatedDateTime, 105) as CreatedDateTime, COUNT(DISTINCT(id)) as Scanned,
+(
+  SELECT COUNT(*) FROM Attendee
+  WHERE (Zaterdag = 1 AND CONVERT(varchar, barcode.CreatedDateTime, 105) = '15-01-2015')
+  OR (Zondag = 1 AND CONVERT(varchar, barcode.CreatedDateTime, 105) = '16-01-2015')
+  OR (Maandag = 1 AND CONVERT(varchar, barcode.CreatedDateTime, 105) = '17-01-2015')
+) as Predicted,
+COUNT(Id) as Total
+FROM ScannedBarcodes barcode
+WHERE barcode.CreatedDateTime IS NOT NULL
+GROUP BY CONVERT(varchar, barcode.CreatedDateTime, 105)
+*/
+    },
+    //connectionString: connectionString
+});
+
+
 var users = getAttendee(null, function (error, result) {
     if (error) { logError(error, res); return; }
     if (result) {
@@ -71,27 +90,6 @@ var users = getAttendee(null, function (error, result) {
     }
 });
 
-var lazyRead = function () {
-    var lazy = require("lazy"),
-        fs = require("fs");
-    
-    var moment = require('moment');
-    var ft = require('file-tail').startTailing('C:\\temp\\capture.txt');
-    ft.on('line', function (line) {
-        var result = line.split(",");
-        result[0] = result[0].replace(/['"]+/g, '');
-        result[0] = moment(result[0], "DD-MM-YYYY HH-mm-ss");
-        
-        var scannedAttendee = new ScannedAttendee(result[0], result[1])
-        console.log(JSON.stringify(scannedAttendee));
-    });
-};
-
-function ScannedAttendee(dateTime, barcode){
-    this.Barcode = barcode;
-    this.DateTime = dateTime;
-}
-
 exports.index = function (req, res) {
     getamountOfRegisteredAttendee(null, function (error, result) {
         if (error) { logError(error, res); return; }
@@ -99,15 +97,26 @@ exports.index = function (req, res) {
             var amountOfRegisteredAttendee = result[0].Amount;
             getAttendeeCountOfToday(null, function (error, result) {
                 if (error) { logError(error, res); return; }
-                if (result) {
-                    var attendeeCountOfToday = result[0].Amount;
-                    res.render('index', { title: 'Home', year: new Date().getFullYear(), amountOfRegisteredAttendee: amountOfRegisteredAttendee, attendeeCountOfToday: attendeeCountOfToday });
+                var attendeeCountOfToday = 0;
+                if (result && result.length == 1) {
+                    attendeeCountOfToday = result[0].Amount;
                 }
+                
+                
+                getScannedBarcodeCountPerDay(null, function (error, result) {
+                    var scannedAttendeeCountArray = [];
+                    if (error) throw error;
+                    if (result) {
+                        result.forEach(function (thing) {
+                            scannedAttendeeCountArray.push(thing);
+                        });
+                    }
+
+                    res.render('index', { title: 'Home', year: new Date().getFullYear(), amountOfRegisteredAttendee: amountOfRegisteredAttendee, attendeeCountOfToday: attendeeCountOfToday, scannedAttendeeCountArray: scannedAttendeeCountArray });
+                });
             });
         }
     });
-    
-    lazyRead();
 };
 
 exports.about = function (req, res) {
@@ -115,7 +124,15 @@ exports.about = function (req, res) {
 };
 
 exports.contact = function (req, res) {
-    res.render('contact', { title: 'Contact', year: new Date().getFullYear(), message: 'Your contact page.' });
+    res.render('registration', { title: 'Registratie', year: new Date().getFullYear() });
+};
+
+exports.scan = function (req, res) {
+    res.render('scan', { title: 'Scan', year: new Date().getFullYear() });
+};
+
+exports.scannedAttendee = function (req, res) {
+    res.render('scannedAttendee', { title: 'Gescande bezoekers', year: new Date().getFullYear(), jsFile: 'countPerDay.js' });
 };
 
 var ietsIngevuld = function (attendee) {

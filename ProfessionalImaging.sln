@@ -31,6 +31,8 @@ Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "ExpressApp", "ExpressApp\Ex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttendeeClassLibrary", "AttendeeClassLibrary\AttendeeClassLibrary.csproj", "{884B0526-BCAF-4C92-A219-DB2D99EE0BC3}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "BarcodeScanApp", "BarcodeScanApp\BarcodeScanApp.njsproj", "{847497A8-C32D-4515-80E1-8B7E5E44FF2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{884B0526-BCAF-4C92-A219-DB2D99EE0BC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{884B0526-BCAF-4C92-A219-DB2D99EE0BC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{884B0526-BCAF-4C92-A219-DB2D99EE0BC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{847497A8-C32D-4515-80E1-8B7E5E44FF2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{847497A8-C32D-4515-80E1-8B7E5E44FF2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{847497A8-C32D-4515-80E1-8B7E5E44FF2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{847497A8-C32D-4515-80E1-8B7E5E44FF2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

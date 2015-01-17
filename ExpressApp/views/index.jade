@@ -7,10 +7,33 @@ block content
   .row
     .col-md-4
       h2 Snel overzicht
-      p Totaal aantal bezoekers welke geregistreerd zijn: 
+      p Totaal aantal geregistreerde bezoekers: 
         b=amountOfRegisteredAttendee
       p Totaal registraties van vandaag: 
         b=attendeeCountOfToday
+      h3 Gescande bezoekers info:
+      div.table-responsive
+        table.table.table-hover
+          thead
+            tr
+              th Dag
+              th Gescand
+              th Geregistreerd
+              th Totaal
+          - var values = scannedAttendeeCountArray;
+          each val in values.length ? values : ['Er zijn geen waarden gevonden.']
+            if (val == ['Er zijn geen waarden gevonden.'])
+              p=val
+            else
+            tr
+              td
+                p=val.CreatedDateTime
+              td
+                p=val.Scanned
+              td
+                p=val.Predicted
+              td
+                p=val.Total
     .col-md-4
       h2 Registratie pagina
       p Hieronder de link direct naar de registratie pagina.
@@ -30,3 +53,5 @@ block content
         a.btn.btn-default(href='info/aantalPerUur') Aantal registraties op welk uur van de dag
       p
         a.btn.btn-default(href='info/bezoekersPerProfessie') Percentage bezoekers per professie
+      p
+        a.btn.btn-default(href='scan/aantalPerDag') Aantal gescande barcodes per dag
